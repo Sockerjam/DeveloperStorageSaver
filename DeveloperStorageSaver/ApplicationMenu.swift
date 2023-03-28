@@ -13,10 +13,10 @@ class ApplicationMenu: NSObject {
     let menu = NSMenu()
 
     func createMenu() -> NSMenu {
-        let storageView = StorageView()
+        let storageView = StorageMainView()
         let topView = NSHostingController(rootView: storageView)
         topView.view.frame.size = CGSize(width: 300, height: 200)
-
+    
         let customMenuItem = NSMenuItem()
         customMenuItem.view = topView.view
 

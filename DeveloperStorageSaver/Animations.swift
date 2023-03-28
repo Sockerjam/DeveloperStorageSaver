@@ -11,40 +11,67 @@ struct LoadingBarAnimatable: ViewModifier, Animatable {
 
     var width: Double
     var loadingPercentage: Double = 0.0
-
+    var targetValue: Double
+    var animationComplete: () -> Void
+    
     var animatableData: Double {
-        get { loadingPercentage }
-        set { loadingPercentage = newValue }
+        didSet {
+            print(animatableData)
+            didAnimationFinish()
+        }
     }
-
+    
+    init(width: Double, loadingPercentage: Double, animationComplete: @escaping () -> Void) {
+        self.width = width
+        self.loadingPercentage = loadingPercentage
+        self.targetValue = loadingPercentage
+        self.animationComplete = animationComplete
+        self.animatableData = loadingPercentage
+    }
+    
     func body(content: Content) -> some View {
         content
             .frame(width: width * CGFloat(loadingPercentage))
     }
+        
+    private func didAnimationFinish() {
+        guard animatableData == targetValue else { return }
+        
+        DispatchQueue.main.async {
+            animationComplete()
+        }
+    }
 }
 
 struct TextAnimatable: ViewModifier, Animatable {
-
-    var loadingPercentage: Double
-
+    
+    var loadingPercentage: Double = 0.0
+    
     var animatableData: Double {
         get { loadingPercentage }
-        set { print(newValue); loadingPercentage = newValue }
+        set { loadingPercentage = newValue }
     }
-
+    
     func body(content: Content) -> some View {
         content
-            .animation(.linear(duration: 0.1), value: loadingPercentage)
+            .overlay(textBody)
+    }
+    
+    var textBody: some View {
+        Text("\(Int(loadingPercentage * 100))%")
+            .frame(maxWidth: .infinity, alignment: .leading).padding(.leading, 5)
+            .font(.subheadline).bold()
+            .foregroundColor(.white)
     }
 }
 
 extension View {
 
-    func loadingAnimation(width: Double, loadingPercentage: Double) -> some View {
-        modifier(LoadingBarAnimatable(width: width, loadingPercentage: loadingPercentage))
+    func loadingAnimation(width: Double, loadingPercentage: Double, animationComplete: @escaping () -> Void) -> some View {
+        modifier(LoadingBarAnimatable(width: width, loadingPercentage: loadingPercentage, animationComplete: animationComplete))
     }
-
-    func textAnimation(loadingPercentage: Double) -> some View {
+    
+    func loadingTextAnimation(loadingPercentage: Double) -> some View {
         modifier(TextAnimatable(loadingPercentage: loadingPercentage))
     }
 }

@@ -30,6 +30,11 @@ enum DeleteSimulator: String {
     case unavailable
 }
 
+enum LoadingState {
+    case loading
+    case loaded
+}
+
 @MainActor
 class ViewModel: NSObject, ObservableObject {
 
@@ -37,44 +42,41 @@ class ViewModel: NSObject, ObservableObject {
     @Published var directoryToDelete: StorageDirectory?
     @Published var loadingTime: Double = 0.0
     @Published var buttonDisabled: Bool?
-
+    @Published var loadingState: LoadingState = .loading
+  
     private let fileManager = FileManager.default
+    private let byteCountFormatter = ByteCountFormatter()
 
     private var task: Process?
     private var outputPipe: Pipe?
     private var errorPipe: Pipe?
-
-    let byteCountFormatter = ByteCountFormatter()
-
+    
     override init() {
         super.init()
-        loadSizes()
     }
 
-    private func loadSizes() {
+    func loadSizes() {
         Task {
             async let coreSimulatorDevices = fetchSize(for: .coreSimulatorDevices)
             async let coreSimulatorCaches = fetchSize(for: .coreSimulatorCaches)
             async let xcodeDerivedData = fetchSize(for: .xcodeDerivedData)
             storageSizes = await [coreSimulatorDevices, coreSimulatorCaches, xcodeDerivedData].compactMap {$0}
+            loadingState = .loaded
         }
+    }
+    
+    func reloadScreen() {
+        self.task = nil
+        self.loadSizes()
+        self.buttonDisabled = false
+        self.directoryToDelete = nil
+        self.setLoadingTime(to: 0.0)
     }
 
     private func setLoadingTime(to value: Double) {
         loadingTime = value
     }
-
-    private func reloadScreen() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.task = nil
-            self.loadSizes()
-            self.buttonDisabled = false
-            self.directoryToDelete = nil
-            self.setLoadingTime(to: 0.0)
-        }
-
-    }
-
+    
     private func fetchSize(for directory: StorageDirectory) async -> StorageSize? {
 
         guard let libraryPath = fileManager.urls(for: .libraryDirectory, in: .allDomainsMask).first else { return nil }
@@ -112,7 +114,6 @@ class ViewModel: NSObject, ObservableObject {
             let storageURLS = try fileManager.contentsOfDirectory(at: storagePath, includingPropertiesForKeys: nil)
             try storageURLS.forEach { try fileManager.removeItem(at: $0) }
             setLoadingTime(to: 1.0)
-            reloadScreen()
         } catch {
             reloadScreen()
             print(error.localizedDescription)
@@ -146,7 +147,6 @@ class ViewModel: NSObject, ObservableObject {
             Task {
                 await MainActor.run {
                     self.setLoadingTime(to: 1.0)
-                    self.reloadScreen()
                 }
             }
         }
