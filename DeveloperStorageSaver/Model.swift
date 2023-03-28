@@ -9,6 +9,6 @@ import Foundation
 
 struct StorageSize: Hashable {
 
-    let directory: String
+    let directory: StorageDirectory
     let size: String
 }

@@ -8,10 +8,10 @@
 import Foundation
 import SwiftUI
 
-enum StorageCategory {
-    case coreSimulatorDevices
-    case coreSimulatorCaches
-    case xcodeDerivedData
+enum StorageDirectory: String, Hashable {
+    case coreSimulatorDevices = "Core Simulator Device"
+    case coreSimulatorCaches = "Core Simulator Caches"
+    case xcodeDerivedData = "Xcode Derived Data"
 
     var path: String {
         switch self {
@@ -25,29 +25,61 @@ enum StorageCategory {
     }
 }
 
+enum DeleteSimulator: String {
+    case all
+    case unavailable
+}
+
 @MainActor
-class ViewModel: ObservableObject {
+class ViewModel: NSObject, ObservableObject {
 
     @Published var storageSizes: [StorageSize] = []
+    @Published var directoryToDelete: StorageDirectory?
+    @Published var loadingTime: Double = 0.0
+    @Published var buttonDisabled: Bool?
 
-    var row = 0
+    private let fileManager = FileManager.default
+
+    private var task: Process?
+    private var outputPipe: Pipe?
+    private var errorPipe: Pipe?
 
     let byteCountFormatter = ByteCountFormatter()
 
-    init() {
+    override init() {
+        super.init()
+        loadSizes()
+    }
+
+    private func loadSizes() {
         Task {
-            async let coreSimulatorDevices = StorageSize(directory: "Core Simulator Devices", size: fetchSize(for: .coreSimulatorDevices) ?? "Empty")
-            async let coreSimulatorCaches = StorageSize(directory: "Core Simulator Caches", size: fetchSize(for: .coreSimulatorCaches) ?? "Empty")
-            async let xcodeDerivedData = StorageSize(directory: "Xcode Derived Data", size: fetchSize(for: .xcodeDerivedData) ?? "Empty")
-            storageSizes = await [coreSimulatorDevices, coreSimulatorCaches, xcodeDerivedData]
+            async let coreSimulatorDevices = fetchSize(for: .coreSimulatorDevices)
+            async let coreSimulatorCaches = fetchSize(for: .coreSimulatorCaches)
+            async let xcodeDerivedData = fetchSize(for: .xcodeDerivedData)
+            storageSizes = await [coreSimulatorDevices, coreSimulatorCaches, xcodeDerivedData].compactMap {$0}
         }
     }
 
-    private func fetchSize(for category: StorageCategory) async -> String? {
+    private func setLoadingTime(to value: Double) {
+        loadingTime = value
+    }
 
-        guard let libraryPath = FileManager.default.urls(for: .libraryDirectory, in: .allDomainsMask).first else { return nil }
+    private func reloadScreen() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.task = nil
+            self.loadSizes()
+            self.buttonDisabled = false
+            self.directoryToDelete = nil
+            self.setLoadingTime(to: 0.0)
+        }
 
-        let storagePath = libraryPath.appending(path: category.path)
+    }
+
+    private func fetchSize(for directory: StorageDirectory) async -> StorageSize? {
+
+        guard let libraryPath = fileManager.urls(for: .libraryDirectory, in: .allDomainsMask).first else { return nil }
+
+        let storagePath = libraryPath.appending(path: directory.path)
 
         byteCountFormatter.countStyle = .file
 
@@ -55,13 +87,75 @@ class ViewModel: ObservableObject {
 
         do {
             let _ = try storagePath.checkResourceIsReachable()
-            guard let storageURLS = FileManager.default.enumerator(at: storagePath, includingPropertiesForKeys: nil)?.allObjects as? [URL] else { return nil }
+            guard let storageURLS = fileManager.enumerator(at: storagePath, includingPropertiesForKeys: nil)?.allObjects as? [URL] else { return nil }
             let storageSizeInKB = try storageURLS.reduce(0) { $0 + (try $1.resourceValues(forKeys: [.totalFileAllocatedSizeKey]).totalFileAllocatedSize ?? 0)}
             sizeInMB = byteCountFormatter.string(for: storageSizeInKB)
         } catch {
             print(error.localizedDescription)
         }
 
-        return sizeInMB
+        return StorageSize(directory: directory, size: sizeInMB ?? "0 MB")
+    }
+
+    func remove(directory: StorageDirectory?) {
+
+        guard let directory = directory else { return }
+        guard let libraryPath = fileManager.urls(for: .libraryDirectory, in: .allDomainsMask).first else { return }
+
+        buttonDisabled = true
+        directoryToDelete = directory
+
+        let storagePath = libraryPath.appending(path: directory.path)
+
+        do {
+            let _ = try storagePath.checkResourceIsReachable()
+            let storageURLS = try fileManager.contentsOfDirectory(at: storagePath, includingPropertiesForKeys: nil)
+            try storageURLS.forEach { try fileManager.removeItem(at: $0) }
+            setLoadingTime(to: 1.0)
+            reloadScreen()
+        } catch {
+            reloadScreen()
+            print(error.localizedDescription)
+        }
+    }
+
+    func removeSimulators(option: DeleteSimulator, directory: StorageDirectory?) {
+
+        task = Process()
+        errorPipe = Pipe()
+        outputPipe = Pipe()
+
+        guard let task = task,
+        let errorPipe = errorPipe,
+        let outputPipe = outputPipe else { return }
+        guard let directory = directory else { return }
+        guard let applicationPath = NSSearchPathForDirectoriesInDomains(.applicationDirectory, .localDomainMask, false).first else { return }
+
+        buttonDisabled = true
+        setLoadingTime(to: 0.0)
+        directoryToDelete = directory
+
+        let executableURL = applicationPath.appending("/Xcode.app/Contents/Developer/usr/bin/simctl")
+
+        task.standardOutput = outputPipe
+        task.standardError = errorPipe
+        task.executableURL = URL(filePath: executableURL, directoryHint: .isDirectory, relativeTo: nil)
+        task.arguments = ["delete", option.rawValue]
+        task.terminationHandler = { [weak self] process in
+            guard let self = self else { return }
+            Task {
+                await MainActor.run {
+                    self.setLoadingTime(to: 1.0)
+                    self.reloadScreen()
+                }
+            }
+        }
+
+        do {
+            try task.run()
+        } catch {
+            print(error.localizedDescription)
+        }
+
     }
 }
