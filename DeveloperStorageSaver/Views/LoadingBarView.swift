@@ -21,7 +21,7 @@ struct LoadingBarView: View {
                         .foregroundColor(.red)
                         .cornerRadius(10)
                 }.loadingAnimation(width: proxy.size.width, loadingPercentage: loadingPercentage) {
-                    withAnimation(.easeIn(duration: 1)) {
+                    withAnimation(.easeIn(duration: 0.6)) {
                         viewModel.reloadScreen()
                     }
                 }

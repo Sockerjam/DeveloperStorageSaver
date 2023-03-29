@@ -16,7 +16,6 @@ struct LoadingBarAnimatable: ViewModifier, Animatable {
     
     var animatableData: Double {
         didSet {
-            print(animatableData)
             didAnimationFinish()
         }
     }

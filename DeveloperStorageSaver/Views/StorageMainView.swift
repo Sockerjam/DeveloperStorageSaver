@@ -19,6 +19,7 @@ struct StorageMainView: View {
             switch viewModel.loadingState {
             case .loading:
                 ProgressView()
+                    .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, 20)
             case .loaded:
@@ -47,13 +48,19 @@ struct StorageMainView: View {
                         .foregroundColor(.white)
                 }
             }
+            .padding(.top, 5)
             .disabled(buttonDisabled)
             .controlSize(.large)
             .buttonStyle(.borderedProminent)
             .tint(buttonDisabled ? .gray : .red)
             .shadow(radius: 2)
+            if selection?.directory == .coreSimulatorDevices {
+                Text("Deleting All Requires Re-Installation Of Devices")
+                    .font(.footnote)
+            }
             Spacer()
         }
+        .frame(maxHeight: .infinity)
         .onReceive(viewModel.$buttonDisabled) { buttonEnabled in
             guard let buttonEnabled = buttonEnabled else { return }
             self.buttonDisabled = buttonEnabled

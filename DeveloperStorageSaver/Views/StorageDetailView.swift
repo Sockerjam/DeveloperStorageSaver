@@ -21,14 +21,16 @@ struct StorageDetailView: View {
             if storageSize.directory == viewModel.directoryToDelete {
                 LoadingBarView(loadingPercentage: loadingPercentage)
                     .padding(.horizontal, 5)
+                    .frame(height: 35)
             } else {
                 ButtonView(selection: $selection, buttonDisabled: $buttonDisabled, storageSize: storageSize)
+                    .frame(height: 35)
             }
             Rectangle()
                 .frame(height: 1)
         }
         .onReceive(viewModel.$loadingTime) { loadingTime in
-            withAnimation(.linear(duration: 2)) {
+            withAnimation(.easeIn(duration: 2)) {
                 loadingPercentage = loadingTime
             }
         }
