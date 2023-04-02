@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LoadingBarView: View {
     
-    @EnvironmentObject var viewModel: ViewModel
+    @EnvironmentObject var viewModel: StorageViewModel
 
     var loadingPercentage: Double
     

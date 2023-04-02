@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StorageDetailView: View {
     
-    @EnvironmentObject var viewModel: ViewModel
+    @EnvironmentObject var viewModel: StorageViewModel
     
     @Binding var selection: StorageSize?
     @Binding var buttonDisabled: Bool

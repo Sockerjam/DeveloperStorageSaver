@@ -10,10 +10,13 @@
 		84415C0629D3820D0008291F /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84415C0529D3820D0008291F /* ButtonView.swift */; };
 		84415C0829D3823E0008291F /* LoadingBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84415C0729D3823E0008291F /* LoadingBarView.swift */; };
 		84415C0A29D382930008291F /* StorageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84415C0929D382930008291F /* StorageDetailView.swift */; };
-		922CE67A29C3666F00803DFF /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922CE67929C3666F00803DFF /* ViewModel.swift */; };
+		922CE67A29C3666F00803DFF /* StorageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922CE67929C3666F00803DFF /* StorageViewModel.swift */; };
 		922CE67C29C3C38500803DFF /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922CE67B29C3C38500803DFF /* Model.swift */; };
 		922CE67E29C3C7F700803DFF /* ApplicationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922CE67D29C3C7F700803DFF /* ApplicationMenu.swift */; };
 		92667B5829D2ED980074060C /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92667B5729D2ED980074060C /* Animations.swift */; };
+		92887F2D29DA127A0020933B /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92887F2C29DA127A0020933B /* OnboardingView.swift */; };
+		92887F2F29DA13A50020933B /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92887F2E29DA13A50020933B /* OnboardingViewModel.swift */; };
+		92887F3329DA1FB70020933B /* UserDefaultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92887F3229DA1FB70020933B /* UserDefaultManager.swift */; };
 		92E144F029C1D6C6008093B8 /* DeveloperStorageSaverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E144EF29C1D6C6008093B8 /* DeveloperStorageSaverApp.swift */; };
 		92E144F229C1D6C6008093B8 /* StorageMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E144F129C1D6C6008093B8 /* StorageMainView.swift */; };
 		92E144F429C1D6C7008093B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92E144F329C1D6C7008093B8 /* Assets.xcassets */; };
@@ -26,10 +29,13 @@
 		84415C0529D3820D0008291F /* ButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
 		84415C0729D3823E0008291F /* LoadingBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingBarView.swift; sourceTree = "<group>"; };
 		84415C0929D382930008291F /* StorageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageDetailView.swift; sourceTree = "<group>"; };
-		922CE67929C3666F00803DFF /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		922CE67929C3666F00803DFF /* StorageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageViewModel.swift; sourceTree = "<group>"; };
 		922CE67B29C3C38500803DFF /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		922CE67D29C3C7F700803DFF /* ApplicationMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationMenu.swift; sourceTree = "<group>"; };
 		92667B5729D2ED980074060C /* Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
+		92887F2C29DA127A0020933B /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		92887F2E29DA13A50020933B /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
+		92887F3229DA1FB70020933B /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
 		92E144EC29C1D6C6008093B8 /* DeveloperStorageSaver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeveloperStorageSaver.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92E144EF29C1D6C6008093B8 /* DeveloperStorageSaverApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperStorageSaverApp.swift; sourceTree = "<group>"; };
 		92E144F129C1D6C6008093B8 /* StorageMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageMainView.swift; sourceTree = "<group>"; };
@@ -52,16 +58,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		84415C0429D381F00008291F /* Views */ = {
+		84415C0429D381F00008291F /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				922CE67B29C3C38500803DFF /* Model.swift */,
+				922CE67929C3666F00803DFF /* StorageViewModel.swift */,
 				92E144F129C1D6C6008093B8 /* StorageMainView.swift */,
 				84415C0929D382930008291F /* StorageDetailView.swift */,
 				84415C0529D3820D0008291F /* ButtonView.swift */,
 				84415C0729D3823E0008291F /* LoadingBarView.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		92887F3029DA1BD20020933B /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				92887F2E29DA13A50020933B /* OnboardingViewModel.swift */,
+				92887F2C29DA127A0020933B /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		92887F3129DA1BF00020933B /* Info */ = {
+			isa = PBXGroup;
+			children = (
 				92F2F1F929D4328F00FE5AAF /* InfoView.swift */,
 			);
-			path = Views;
+			path = Info;
 			sourceTree = "<group>";
 		};
 		92E144E329C1D6C6008093B8 = {
@@ -86,10 +110,11 @@
 				92E144FE29C1D865008093B8 /* Info.plist */,
 				92E144EF29C1D6C6008093B8 /* DeveloperStorageSaverApp.swift */,
 				922CE67D29C3C7F700803DFF /* ApplicationMenu.swift */,
-				922CE67B29C3C38500803DFF /* Model.swift */,
-				922CE67929C3666F00803DFF /* ViewModel.swift */,
-				84415C0429D381F00008291F /* Views */,
 				92667B5729D2ED980074060C /* Animations.swift */,
+				92887F3229DA1FB70020933B /* UserDefaultManager.swift */,
+				92887F3029DA1BD20020933B /* Onboarding */,
+				84415C0429D381F00008291F /* Storage */,
+				92887F3129DA1BF00020933B /* Info */,
 				92E144F329C1D6C7008093B8 /* Assets.xcassets */,
 				92E144F829C1D6C7008093B8 /* DeveloperStorageSaver.entitlements */,
 				92E144F529C1D6C7008093B8 /* Preview Content */,
@@ -180,13 +205,16 @@
 				92E144F229C1D6C6008093B8 /* StorageMainView.swift in Sources */,
 				922CE67E29C3C7F700803DFF /* ApplicationMenu.swift in Sources */,
 				92667B5829D2ED980074060C /* Animations.swift in Sources */,
-				922CE67A29C3666F00803DFF /* ViewModel.swift in Sources */,
+				922CE67A29C3666F00803DFF /* StorageViewModel.swift in Sources */,
 				92E144F029C1D6C6008093B8 /* DeveloperStorageSaverApp.swift in Sources */,
 				84415C0829D3823E0008291F /* LoadingBarView.swift in Sources */,
 				922CE67C29C3C38500803DFF /* Model.swift in Sources */,
+				92887F3329DA1FB70020933B /* UserDefaultManager.swift in Sources */,
+				92887F2F29DA13A50020933B /* OnboardingViewModel.swift in Sources */,
 				84415C0629D3820D0008291F /* ButtonView.swift in Sources */,
 				92F2F1FA29D4328F00FE5AAF /* InfoView.swift in Sources */,
 				84415C0A29D382930008291F /* StorageDetailView.swift in Sources */,
+				92887F2D29DA127A0020933B /* OnboardingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,6 +349,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DeveloperStorageSaver/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DeveloperStorageSaver;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -350,6 +380,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DeveloperStorageSaver/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DeveloperStorageSaver;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (

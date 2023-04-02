@@ -35,14 +35,22 @@ enum LoadingState {
     case loaded
 }
 
+enum UserState {
+    case onboarding
+    case storageView
+}
+
 @MainActor
-class ViewModel: NSObject, ObservableObject {
+class StorageViewModel: NSObject, ObservableObject {
+
+    @Published var userOnboarded: Bool = false
 
     @Published var storageSizes: [StorageSize] = []
     @Published var directoryToDelete: StorageDirectory?
     @Published var loadingTime: Double = 0.0
     @Published var buttonDisabled: Bool?
     @Published var loadingState: LoadingState = .loading
+    @Published var userState: UserState = .onboarding
   
     private let fileManager = FileManager.default
     private let byteCountFormatter = ByteCountFormatter()
@@ -53,6 +61,10 @@ class ViewModel: NSObject, ObservableObject {
     
     override init() {
         super.init()
+    }
+
+    private func checkUserSelectedDirectories() {
+        // check userdefault and set userState state based on that
     }
 
     func loadSizes() {

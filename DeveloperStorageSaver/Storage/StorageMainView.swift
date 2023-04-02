@@ -9,7 +9,22 @@ import SwiftUI
 
 struct StorageMainView: View {
 
-    @StateObject var viewModel = ViewModel()
+    @StateObject var viewModel = StorageViewModel()
+
+    var body: some View {
+        switch viewModel.userState {
+        case .onboarding:
+            OnboardingView()
+        case .storageView:
+            StorageDetailInfoView()
+                .environmentObject(viewModel)
+        }
+    }
+}
+
+struct StorageDetailInfoView: View {
+    
+    @EnvironmentObject var viewModel: StorageViewModel
 
     @State private var selection: StorageSize?
     @State private var buttonDisabled = true
@@ -25,7 +40,7 @@ struct StorageMainView: View {
             case .loaded:
                 StorageDetailView(selection: $selection, buttonDisabled: $buttonDisabled)
             }
-            
+
             HStack {
                 if selection?.directory == .coreSimulatorDevices {
                     Button {
