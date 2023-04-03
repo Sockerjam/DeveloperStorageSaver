@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 enum StorageDirectory: String, Hashable {
     case coreSimulatorDevices = "Core Simulator Device"
@@ -16,11 +17,11 @@ enum StorageDirectory: String, Hashable {
     var path: String {
         switch self {
         case .coreSimulatorDevices:
-            return "Developer/CoreSimulator/Devices"
+            return "CoreSimulator/Devices"
         case .coreSimulatorCaches:
-            return "Developer/CoreSimulator/Caches"
+            return "CoreSimulator/Caches"
         case .xcodeDerivedData:
-            return "Developer/Xcode/DerivedData"
+            return "Xcode/DerivedData"
         }
     }
 }
@@ -43,28 +44,94 @@ enum UserState {
 @MainActor
 class StorageViewModel: NSObject, ObservableObject {
 
-    @Published var userOnboarded: Bool = false
-
     @Published var storageSizes: [StorageSize] = []
     @Published var directoryToDelete: StorageDirectory?
     @Published var loadingTime: Double = 0.0
     @Published var buttonDisabled: Bool?
     @Published var loadingState: LoadingState = .loading
     @Published var userState: UserState = .onboarding
+
+    @Published var directoryIsSaved: Bool = false
+    @Published var xcodeApplicationIsSaved: Bool = false
   
     private let fileManager = FileManager.default
+    private let userDefaultManager = UserDefaultManager.shared
     private let byteCountFormatter = ByteCountFormatter()
+
+    private var developerURL: URL?
+    private var xcodeApplicationURL: URL?
 
     private var task: Process?
     private var outputPipe: Pipe?
     private var errorPipe: Pipe?
+    private var cancellable = Set<AnyCancellable>()
+
+    private lazy var directoriesAreSelected: AnyPublisher<Bool, Never> = {
+        Publishers.CombineLatest(userDefaultManager.$directoryIsSaved, userDefaultManager.$xcodeApplicationIsSaved)
+            .print()
+            .compactMap{ $0 }
+            .allSatisfy({ directory, xcode in
+                guard let directory = directory,
+                      let xcode = xcode else { return false }
+                return directory && xcode == true
+            })
+            .eraseToAnyPublisher()
+    }()
     
     override init() {
         super.init()
+        userDefaultManager.resetDefaults()
+        fetchDeveloperPathURL()
+        setupSubscriptions()
     }
 
-    private func checkUserSelectedDirectories() {
-        // check userdefault and set userState state based on that
+    private func setupSubscriptions() {
+
+//        userDefaultManager.$directoryIsSaved
+//            .sink { directory in
+//                print("DIRECTORY", directory)
+//                self.directoryIsSaved = directory
+//            }
+//            .store(in: &cancellable)
+//
+//        userDefaultManager.$xcodeApplicationIsSaved
+//            .sink { directory in
+//                print("XCODE", directory)
+//                self.xcodeApplicationIsSaved = directory
+//            }
+//            .store(in: &cancellable)
+
+        directoriesAreSelected
+            .print("Test")
+            .sink(receiveCompletion: { completion in
+                print(completion)
+            }, receiveValue: { bool in
+                switch bool {
+                case true:
+                    self.userState = .storageView
+                case false:
+                    self.userState = .onboarding
+                }
+            })
+            .store(in: &cancellable)
+    }
+
+    private func fetchDeveloperPathURL() {
+
+        guard let developerURL = try? userDefaultManager.fetchDeveloperBookmark() else { return }
+        _ = developerURL.startAccessingSecurityScopedResource()
+        self.developerURL = developerURL
+        developerURL.stopAccessingSecurityScopedResource()
+
+        fetchXcodeApplicationPathURL()
+    }
+
+    private func fetchXcodeApplicationPathURL() {
+
+        guard let xcodeApplicationURL = try? userDefaultManager.fetchXcodeBookmark() else { return }
+        _ = xcodeApplicationURL.startAccessingSecurityScopedResource()
+        self.xcodeApplicationURL = xcodeApplicationURL
+        xcodeApplicationURL.stopAccessingSecurityScopedResource()
     }
 
     func loadSizes() {
@@ -91,7 +158,7 @@ class StorageViewModel: NSObject, ObservableObject {
     
     private func fetchSize(for directory: StorageDirectory) async -> StorageSize? {
 
-        guard let libraryPath = fileManager.urls(for: .libraryDirectory, in: .allDomainsMask).first else { return nil }
+        guard let libraryPath = developerURL else { return nil }
 
         let storagePath = libraryPath.appending(path: directory.path)
 
@@ -142,13 +209,13 @@ class StorageViewModel: NSObject, ObservableObject {
         let errorPipe = errorPipe,
         let outputPipe = outputPipe else { return }
         guard let directory = directory else { return }
-        guard let applicationPath = NSSearchPathForDirectoriesInDomains(.applicationDirectory, .localDomainMask, false).first else { return }
+        guard let applicationPath = xcodeApplicationURL?.absoluteString else { return }
 
         buttonDisabled = true
         setLoadingTime(to: 0.0)
         directoryToDelete = directory
 
-        let executableURL = applicationPath.appending("/Xcode.app/Contents/Developer/usr/bin/simctl")
+        let executableURL = applicationPath.appending("/simctl")
 
         task.standardOutput = outputPipe
         task.standardError = errorPipe

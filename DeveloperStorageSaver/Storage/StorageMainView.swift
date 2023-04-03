@@ -82,7 +82,7 @@ struct StorageDetailInfoView: View {
         }
         .environmentObject(viewModel)
         .padding(.top, 10)
-        .background(Gradient(colors: [.purple, .pink])).edgesIgnoringSafeArea(.all)
+        .background(Gradient(colors: [.purple, .pink]))
         .onAppear {
             viewModel.loadSizes()
         }

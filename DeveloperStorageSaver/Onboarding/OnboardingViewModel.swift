@@ -12,6 +12,7 @@ class OnboardingViewModel: ObservableObject {
 
     @Published var directorySelected: Bool = false
     @Published var xcodeApplicationSelected: Bool = false
+    @Published var showAlert: Bool = false
 
     private let nsOpenPalen = NSOpenPanel()
     private let userDefaultManager = UserDefaultManager.shared
@@ -40,7 +41,9 @@ class OnboardingViewModel: ObservableObject {
 
             guard let userSelectedDirectory = nsOpenPalen.urls.first else { return }
 
-            let appendedDirectory = userSelectedDirectory.appending(path: xcode ? "Contents/Developer/usr/bin/simctl" : "")
+            guard userSelectedDirectory.absoluteString.contains("Developer") || userSelectedDirectory.absoluteString.contains("Xcode") else { return }
+
+            let appendedDirectory = userSelectedDirectory.appending(path: xcode ? "Contents/Developer/usr/bin" : "")
 
             print(appendedDirectory)
 
@@ -57,7 +60,8 @@ class OnboardingViewModel: ObservableObject {
             let bookmarkData = try selectedDirectory.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
             userDefaultManager.saveDirectoryBookmark(data: bookmarkData, xcode: xcode)
         } catch {
-            print("ERROR", error.localizedDescription)
+            print(error.localizedDescription)
+            return
         }
 
         if xcode {

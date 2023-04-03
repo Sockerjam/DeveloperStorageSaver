@@ -18,8 +18,8 @@ struct OnboardingView: View {
         VStack {
             Text("""
                  To Use Developer Storage Saver
-                 please select your Developer
-                 Directory and Xcode Application
+                 please select your Library/Developer
+                 Directory and Application/Xcode.app
                  location.
                  """)
             Button {
@@ -27,33 +27,37 @@ struct OnboardingView: View {
             } label: {
                 HStack {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(directorySelected ? .green : .gray)
+                        .foregroundColor(directorySelected ? .green : .white)
                     Text("Select Developer Directory")
-
                 }
             }
+            .buttonStyle(.borderedProminent)
+
             .padding()
             Button {
                 onboardingViewModel.setupNSOpenPanel(xcode: true)
             } label: {
                 HStack {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(xcodeApplicationSelected ? .green : .gray)
+                        .foregroundColor(xcodeApplicationSelected ? .green : .white)
                     Text("Select Xcode Application")
-
                 }
             }
+            .buttonStyle(.borderedProminent)
+
 
         }
+        .foregroundColor(.white)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        .background(Gradient(colors: [.purple, .pink]))
         .onReceive(onboardingViewModel.$directorySelected) { directorySelected in
-            withAnimation(.easeIn(duration: 1)) {
+            withAnimation(.easeIn(duration: 0.6)) {
                 self.directorySelected = directorySelected
             }
 
         }
         .onReceive(onboardingViewModel.$xcodeApplicationSelected) { xcodeApplicationSelected in
-            withAnimation(.easeIn(duration: 1)) {
+            withAnimation(.easeIn(duration: 0.6)) {
                 self.xcodeApplicationSelected = xcodeApplicationSelected
             }
 
