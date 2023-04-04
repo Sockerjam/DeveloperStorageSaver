@@ -66,57 +66,70 @@ class StorageViewModel: NSObject, ObservableObject {
     private var errorPipe: Pipe?
     private var cancellable = Set<AnyCancellable>()
 
-    private lazy var directoriesAreSelected: AnyPublisher<Bool, Never> = {
-        Publishers.CombineLatest(userDefaultManager.$directoryIsSaved, userDefaultManager.$xcodeApplicationIsSaved)
-            .print()
-            .compactMap{ $0 }
-            .allSatisfy({ directory, xcode in
-                guard let directory = directory,
-                      let xcode = xcode else { return false }
-                return directory && xcode == true
-            })
-            .eraseToAnyPublisher()
-    }()
-    
     override init() {
         super.init()
-        userDefaultManager.resetDefaults()
-        fetchDeveloperPathURL()
-        setupSubscriptions()
+
+        if userDefaultManager.isUserOboarded() {
+            print("User is onboarded")
+            setupStorageViewSubscription()
+            fetchBookmarks()
+        } else {
+            print("launching onboarding")
+            setupOnboardingSubscription()
+        }
+
     }
+    
+    private func setupOnboardingSubscription() {
 
-    private func setupSubscriptions() {
-
-//        userDefaultManager.$directoryIsSaved
-//            .sink { directory in
-//                print("DIRECTORY", directory)
-//                self.directoryIsSaved = directory
-//            }
-//            .store(in: &cancellable)
-//
-//        userDefaultManager.$xcodeApplicationIsSaved
-//            .sink { directory in
-//                print("XCODE", directory)
-//                self.xcodeApplicationIsSaved = directory
-//            }
-//            .store(in: &cancellable)
-
-        directoriesAreSelected
-            .print("Test")
-            .sink(receiveCompletion: { completion in
-                print(completion)
-            }, receiveValue: { bool in
-                switch bool {
-                case true:
+        userDefaultManager.directoryPublisher
+            .combineLatest(userDefaultManager.xcodePublisher)
+            .flatMap { directory, xcode -> AnyPublisher<Bool, Never> in
+                if directory && xcode == true {
+                    return Just(true).eraseToAnyPublisher()
+                } else {
+                    return Just(false).eraseToAnyPublisher()
+                }
+            }
+            .sink { completion in
+                print("Onboarding Subscription Completed with :", completion)
+                self.setupStorageViewSubscription()
+                self.fetchBookmarks()
+            } receiveValue: { value in
+                if value {
                     self.userState = .storageView
-                case false:
+                } else {
                     self.userState = .onboarding
                 }
-            })
+            }
             .store(in: &cancellable)
     }
 
-    private func fetchDeveloperPathURL() {
+    private func setupStorageViewSubscription() {
+
+        userDefaultManager.directoryBookmarkPublisher
+            .combineLatest(userDefaultManager.xcodeDirectoryBookmarkPublisher)
+            .flatMap { directory, xcode -> AnyPublisher<Bool, Never> in
+                if directory && xcode == true {
+                    return Just(true).eraseToAnyPublisher()
+                } else {
+                    return Just(false).eraseToAnyPublisher()
+                }
+            }
+            .sink { completion in
+                print("Storage View Subscription Completed with :", completion)
+            } receiveValue: { value in
+                if value {
+                    self.userState = .storageView
+                } else {
+                    self.userState = .onboarding
+                    self.setupOnboardingSubscription()
+                }
+            }
+            .store(in: &cancellable)
+    }
+
+    private func fetchBookmarks() {
 
         guard let developerURL = try? userDefaultManager.fetchDeveloperBookmark() else { return }
         _ = developerURL.startAccessingSecurityScopedResource()
