@@ -132,6 +132,7 @@ class StorageViewModel: NSObject, ObservableObject {
     private func fetchBookmarks() {
 
         guard let developerURL = try? userDefaultManager.fetchDeveloperBookmark() else { return }
+        print("Fetched Developer Bookmark")
         _ = developerURL.startAccessingSecurityScopedResource()
         self.developerURL = developerURL
         developerURL.stopAccessingSecurityScopedResource()
@@ -142,6 +143,7 @@ class StorageViewModel: NSObject, ObservableObject {
     private func fetchXcodeApplicationPathURL() {
 
         guard let xcodeApplicationURL = try? userDefaultManager.fetchXcodeBookmark() else { return }
+        print("Fetched Xcode Bookmark")
         _ = xcodeApplicationURL.startAccessingSecurityScopedResource()
         self.xcodeApplicationURL = xcodeApplicationURL
         xcodeApplicationURL.stopAccessingSecurityScopedResource()

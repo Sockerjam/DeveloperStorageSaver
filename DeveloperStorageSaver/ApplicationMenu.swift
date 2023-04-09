@@ -32,7 +32,7 @@ class ApplicationMenu: NSObject {
         aboutMenuItem.target = self
 
         menu.addItem(aboutMenuItem)
-
+        
         return menu
     }
 }
@@ -46,6 +46,11 @@ extension ApplicationMenu: InfoDelegate {
                                                           documentAttributes: nil) else { return }
         NSApp.orderFrontStandardAboutPanel(options: [.applicationIcon: NSImage(named: NSImage.Name("AppIcon")),
                                                      .credits: importantInfo])
+        
+    }
+    
+    func terminateApplication() {
+        NSApplication.shared.terminate(self)
     }
 
 
