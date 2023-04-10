@@ -7,16 +7,13 @@
 
 import SwiftUI
 
-protocol InfoDelegate {
+protocol InfoDelegate: AnyObject {
     func showInfoWindow()
-    func terminateApplication()
 }
 
 struct InfoView: View {
     
-    @State private var launchAtLogin = false
-    
-    var delegate: InfoDelegate?
+    weak var delegate: InfoDelegate?
     
     var body: some View {
             HStack {
@@ -30,21 +27,8 @@ struct InfoView: View {
                 }
                 .buttonStyle(.plain)
                 .controlSize(.large)
-                
-                Spacer()
-                Button {
-                    delegate?.terminateApplication()
-                } label: {
-                    Text("Quit")
-                        .foregroundColor(.white)
-                        .padding(.vertical, 10)
-                        .padding(.trailing, 5)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.red)
-                .controlSize(.large)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             .background(.pink)
     }
 }

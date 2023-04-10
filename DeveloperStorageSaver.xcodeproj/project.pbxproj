@@ -21,6 +21,8 @@
 		92887F2D29DA127A0020933B /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92887F2C29DA127A0020933B /* OnboardingView.swift */; };
 		92887F2F29DA13A50020933B /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92887F2E29DA13A50020933B /* OnboardingViewModel.swift */; };
 		92887F3329DA1FB70020933B /* UserDefaultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92887F3229DA1FB70020933B /* UserDefaultManager.swift */; };
+		929420AF29E43A1D0087DD5B /* ToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929420AE29E43A1D0087DD5B /* ToolbarView.swift */; };
+		929420B129E44CB40087DD5B /* ToolBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929420B029E44CB40087DD5B /* ToolBarViewModel.swift */; };
 		92E144F029C1D6C6008093B8 /* DeveloperStorageSaverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E144EF29C1D6C6008093B8 /* DeveloperStorageSaverApp.swift */; };
 		92E144F229C1D6C6008093B8 /* StorageMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E144F129C1D6C6008093B8 /* StorageMainView.swift */; };
 		92E144F429C1D6C7008093B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92E144F329C1D6C7008093B8 /* Assets.xcassets */; };
@@ -58,6 +60,8 @@
 		92887F2C29DA127A0020933B /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		92887F2E29DA13A50020933B /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		92887F3229DA1FB70020933B /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
+		929420AE29E43A1D0087DD5B /* ToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarView.swift; sourceTree = "<group>"; };
+		929420B029E44CB40087DD5B /* ToolBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBarViewModel.swift; sourceTree = "<group>"; };
 		92E144EC29C1D6C6008093B8 /* DeveloperStorageSaver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeveloperStorageSaver.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92E144EF29C1D6C6008093B8 /* DeveloperStorageSaverApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperStorageSaverApp.swift; sourceTree = "<group>"; };
 		92E144F129C1D6C6008093B8 /* StorageMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageMainView.swift; sourceTree = "<group>"; };
@@ -128,12 +132,14 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
-		92887F3129DA1BF00020933B /* Info */ = {
+		92887F3129DA1BF00020933B /* Tools */ = {
 			isa = PBXGroup;
 			children = (
 				92F2F1F929D4328F00FE5AAF /* InfoView.swift */,
+				929420AE29E43A1D0087DD5B /* ToolbarView.swift */,
+				929420B029E44CB40087DD5B /* ToolBarViewModel.swift */,
 			);
-			path = Info;
+			path = Tools;
 			sourceTree = "<group>";
 		};
 		92E144E329C1D6C6008093B8 = {
@@ -165,7 +171,7 @@
 				92887F3229DA1FB70020933B /* UserDefaultManager.swift */,
 				92887F3029DA1BD20020933B /* Onboarding */,
 				84415C0429D381F00008291F /* Storage */,
-				92887F3129DA1BF00020933B /* Info */,
+				92887F3129DA1BF00020933B /* Tools */,
 				92E144F329C1D6C7008093B8 /* Assets.xcassets */,
 				92E144F829C1D6C7008093B8 /* DeveloperStorageSaver.entitlements */,
 				92E144F529C1D6C7008093B8 /* Preview Content */,
@@ -297,12 +303,14 @@
 				922CE67A29C3666F00803DFF /* StorageViewModel.swift in Sources */,
 				92E144F029C1D6C6008093B8 /* DeveloperStorageSaverApp.swift in Sources */,
 				84415C0829D3823E0008291F /* LoadingBarView.swift in Sources */,
+				929420AF29E43A1D0087DD5B /* ToolbarView.swift in Sources */,
 				922CE67C29C3C38500803DFF /* Model.swift in Sources */,
 				92887F3329DA1FB70020933B /* UserDefaultManager.swift in Sources */,
 				92887F2F29DA13A50020933B /* OnboardingViewModel.swift in Sources */,
 				84415C0629D3820D0008291F /* ButtonView.swift in Sources */,
 				92F2F1FA29D4328F00FE5AAF /* InfoView.swift in Sources */,
 				84415C0A29D382930008291F /* StorageDetailView.swift in Sources */,
+				929420B129E44CB40087DD5B /* ToolBarViewModel.swift in Sources */,
 				92887F2D29DA127A0020933B /* OnboardingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -319,7 +327,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9MY4M2NMA3;
+				DEVELOPMENT_TEAM = M79UR55F3F;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSBackgroundOnly = YES;
@@ -349,7 +357,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9MY4M2NMA3;
+				DEVELOPMENT_TEAM = M79UR55F3F;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSBackgroundOnly = YES;
@@ -493,7 +501,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DeveloperStorageSaver/Preview Content\"";
-				DEVELOPMENT_TEAM = 9MY4M2NMA3;
+				DEVELOPMENT_TEAM = M79UR55F3F;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -525,7 +533,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DeveloperStorageSaver/Preview Content\"";
-				DEVELOPMENT_TEAM = 9MY4M2NMA3;
+				DEVELOPMENT_TEAM = M79UR55F3F;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

@@ -68,7 +68,7 @@ class StorageViewModel: NSObject, ObservableObject {
 
     override init() {
         super.init()
-
+//        userDefaultManager.resetDefaults()
         if userDefaultManager.isUserOboarded() {
             print("User is onboarded")
             setupStorageViewSubscription()

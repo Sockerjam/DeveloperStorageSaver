@@ -10,9 +10,12 @@ import SwiftUI
 
 class ApplicationMenu: NSObject {
 
-    let menu = NSMenu()
+    private let menu = NSMenu()
 
     func createMenu() -> NSMenu {
+
+        //MARK: Main Storage View
+        
         let storageView = StorageMainView()
         let topView = NSHostingController(rootView: storageView)
         topView.view.frame.size = CGSize(width: 300, height: 220)
@@ -22,17 +25,30 @@ class ApplicationMenu: NSObject {
 
         menu.addItem(customMenuItem)
 
+        //MARK: Toolbar View
+
+        var toolbarView = ToolbarView()
+        let toolbarHostingViewController = NSHostingController(rootView: toolbarView)
+        toolbarHostingViewController.view.frame.size = CGSize(width: 300, height: 25)
+
+        let toolbarMenuItem = NSMenuItem()
+        toolbarMenuItem.view = toolbarHostingViewController.view
+
+        menu.addItem(toolbarMenuItem)
+
+        //MARK: Info View
+
         let infoView = InfoView(delegate: self)
         let infoViewHostingController = NSHostingController(rootView: infoView)
         infoViewHostingController.view.frame.size = CGSize(width: 300, height: 25)
 
-        let aboutMenuItem = NSMenuItem()
-        aboutMenuItem.view = infoViewHostingController.view
+        let infoViewMenuItem = NSMenuItem()
+        infoViewMenuItem.view = infoViewHostingController.view
 
-        aboutMenuItem.target = self
+        infoViewMenuItem.target = self
 
-        menu.addItem(aboutMenuItem)
-        
+        menu.addItem(infoViewMenuItem)
+
         return menu
     }
 }
@@ -48,10 +64,4 @@ extension ApplicationMenu: InfoDelegate {
                                                      .credits: importantInfo])
         
     }
-    
-    func terminateApplication() {
-        NSApplication.shared.terminate(self)
-    }
-
-
 }

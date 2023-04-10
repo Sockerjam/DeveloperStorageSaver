@@ -12,6 +12,7 @@ enum UserDefaultKey: String, CaseIterable {
     case directory
     case xcode
     case onboarded
+    case launchAtLogin
 }
 
 enum UserDefaultError: Error {
@@ -96,6 +97,16 @@ class UserDefaultManager {
         } catch {
             throw UserDefaultError.urlIsNil
         }
+    }
+
+    func setLaunchAtLoginState(_ state: Bool) {
+        standard.set(state, forKey: UserDefaultKey.launchAtLogin.rawValue)
+        print(standard.value(forKey: UserDefaultKey.launchAtLogin.rawValue) as? Bool)
+    }
+
+    func fetchLaunchAtLoginState() -> Bool? {
+        guard let value = standard.value(forKey: UserDefaultKey.launchAtLogin.rawValue) as? Bool else { return nil }
+        return value
     }
 }
 
