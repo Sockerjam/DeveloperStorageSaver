@@ -68,7 +68,7 @@ class StorageViewModel: NSObject, ObservableObject {
 
     override init() {
         super.init()
-//        userDefaultManager.resetDefaults()
+        userDefaultManager.resetDefaults()
         if userDefaultManager.isUserOboarded() {
             print("User is onboarded")
             setupStorageViewSubscription()
@@ -109,6 +109,7 @@ class StorageViewModel: NSObject, ObservableObject {
 
         userDefaultManager.directoryBookmarkPublisher
             .combineLatest(userDefaultManager.xcodeDirectoryBookmarkPublisher)
+            .receive(on: RunLoop.main)
             .flatMap { directory, xcode -> AnyPublisher<Bool, Never> in
                 if directory && xcode == true {
                     return Just(true).eraseToAnyPublisher()
@@ -150,6 +151,7 @@ class StorageViewModel: NSObject, ObservableObject {
     }
 
     func loadSizes() {
+        print("Loading Sizes")
         Task {
             async let coreSimulatorDevices = fetchSize(for: .coreSimulatorDevices)
             async let coreSimulatorCaches = fetchSize(for: .coreSimulatorCaches)
@@ -177,6 +179,8 @@ class StorageViewModel: NSObject, ObservableObject {
 
         let storagePath = libraryPath.appending(path: directory.path)
 
+        print("StoragePath: ", storagePath)
+
         byteCountFormatter.countStyle = .file
 
         var sizeInMB: String?
@@ -186,6 +190,7 @@ class StorageViewModel: NSObject, ObservableObject {
             guard let storageURLS = fileManager.enumerator(at: storagePath, includingPropertiesForKeys: nil)?.allObjects as? [URL] else { return nil }
             let storageSizeInKB = try storageURLS.reduce(0) { $0 + (try $1.resourceValues(forKeys: [.totalFileAllocatedSizeKey]).totalFileAllocatedSize ?? 0)}
             sizeInMB = byteCountFormatter.string(for: storageSizeInKB)
+            print(sizeInMB)
         } catch {
             print(error.localizedDescription)
         }

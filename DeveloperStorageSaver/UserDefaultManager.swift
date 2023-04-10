@@ -54,7 +54,6 @@ class UserDefaultManager {
     }
 
     func isUserOboarded() -> Bool {
-        print("User is onboarded:", standard.bool(forKey: UserDefaultKey.onboarded.rawValue))
         return standard.bool(forKey: UserDefaultKey.onboarded.rawValue)
     }
 
@@ -101,7 +100,6 @@ class UserDefaultManager {
 
     func setLaunchAtLoginState(_ state: Bool) {
         standard.set(state, forKey: UserDefaultKey.launchAtLogin.rawValue)
-        print(standard.value(forKey: UserDefaultKey.launchAtLogin.rawValue) as? Bool)
     }
 
     func fetchLaunchAtLoginState() -> Bool? {
