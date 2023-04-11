@@ -58,9 +58,6 @@ class StorageViewModel: NSObject, ObservableObject {
     private let userDefaultManager = UserDefaultManager.shared
     private let byteCountFormatter = ByteCountFormatter()
 
-    private var developerURL: URL?
-    private var xcodeApplicationURL: URL?
-
     private var task: Process?
     private var outputPipe: Pipe?
     private var errorPipe: Pipe?
@@ -68,11 +65,11 @@ class StorageViewModel: NSObject, ObservableObject {
 
     override init() {
         super.init()
-        userDefaultManager.resetDefaults()
+//        userDefaultManager.resetDefaults()
         if userDefaultManager.isUserOboarded() {
             print("User is onboarded")
             setupStorageViewSubscription()
-            fetchBookmarks()
+            userState = .storageView
         } else {
             print("launching onboarding")
             setupOnboardingSubscription()
@@ -93,11 +90,10 @@ class StorageViewModel: NSObject, ObservableObject {
             }
             .sink { completion in
                 print("Onboarding Subscription Completed with :", completion)
-                self.setupStorageViewSubscription()
-                self.fetchBookmarks()
             } receiveValue: { value in
                 if value {
                     self.userState = .storageView
+                    self.setupStorageViewSubscription()
                 } else {
                     self.userState = .onboarding
                 }
@@ -130,24 +126,20 @@ class StorageViewModel: NSObject, ObservableObject {
             .store(in: &cancellable)
     }
 
-    private func fetchBookmarks() {
+    private func fetchDeveloperPath() -> URL? {
 
-        guard let developerURL = try? userDefaultManager.fetchDeveloperBookmark() else { return }
+        guard let developerURL = try? userDefaultManager.fetchDeveloperBookmark() else { return nil }
         print("Fetched Developer Bookmark")
         _ = developerURL.startAccessingSecurityScopedResource()
-        self.developerURL = developerURL
-        developerURL.stopAccessingSecurityScopedResource()
-
-        fetchXcodeApplicationPathURL()
+        return developerURL
     }
 
-    private func fetchXcodeApplicationPathURL() {
+    private func fetchXcodeApplicationPathURL() -> URL? {
 
-        guard let xcodeApplicationURL = try? userDefaultManager.fetchXcodeBookmark() else { return }
+        guard let xcodeApplicationURL = try? userDefaultManager.fetchXcodeBookmark() else { return nil }
         print("Fetched Xcode Bookmark")
         _ = xcodeApplicationURL.startAccessingSecurityScopedResource()
-        self.xcodeApplicationURL = xcodeApplicationURL
-        xcodeApplicationURL.stopAccessingSecurityScopedResource()
+        return xcodeApplicationURL
     }
 
     func loadSizes() {
@@ -175,11 +167,9 @@ class StorageViewModel: NSObject, ObservableObject {
     
     private func fetchSize(for directory: StorageDirectory) async -> StorageSize? {
 
-        guard let libraryPath = developerURL else { return nil }
+        guard let libraryPath = fetchDeveloperPath() else { return nil }
 
         let storagePath = libraryPath.appending(path: directory.path)
-
-        print("StoragePath: ", storagePath)
 
         byteCountFormatter.countStyle = .file
 
@@ -190,10 +180,11 @@ class StorageViewModel: NSObject, ObservableObject {
             guard let storageURLS = fileManager.enumerator(at: storagePath, includingPropertiesForKeys: nil)?.allObjects as? [URL] else { return nil }
             let storageSizeInKB = try storageURLS.reduce(0) { $0 + (try $1.resourceValues(forKeys: [.totalFileAllocatedSizeKey]).totalFileAllocatedSize ?? 0)}
             sizeInMB = byteCountFormatter.string(for: storageSizeInKB)
-            print(sizeInMB)
         } catch {
             print(error.localizedDescription)
         }
+
+        libraryPath.stopAccessingSecurityScopedResource()
 
         return StorageSize(directory: directory, size: sizeInMB ?? "0 MB")
     }
@@ -201,12 +192,14 @@ class StorageViewModel: NSObject, ObservableObject {
     func remove(directory: StorageDirectory?) {
 
         guard let directory = directory else { return }
-        guard let libraryPath = fileManager.urls(for: .libraryDirectory, in: .allDomainsMask).first else { return }
+        guard let developerPath = fetchDeveloperPath() else { return }
 
         buttonDisabled = true
         directoryToDelete = directory
 
-        let storagePath = libraryPath.appending(path: directory.path)
+        let storagePath = developerPath.appending(path: directory.path)
+
+        print(storagePath)
 
         do {
             let _ = try storagePath.checkResourceIsReachable()
@@ -217,6 +210,8 @@ class StorageViewModel: NSObject, ObservableObject {
             reloadScreen()
             print(error.localizedDescription)
         }
+
+        developerPath.stopAccessingSecurityScopedResource()
     }
 
     func removeSimulators(option: DeleteSimulator, directory: StorageDirectory?) {
@@ -229,7 +224,8 @@ class StorageViewModel: NSObject, ObservableObject {
         let errorPipe = errorPipe,
         let outputPipe = outputPipe else { return }
         guard let directory = directory else { return }
-        guard let applicationPath = xcodeApplicationURL?.absoluteString else { return }
+        guard let xcodeApplicationPath = fetchXcodeApplicationPathURL() else { return }
+        let applicationPath = xcodeApplicationPath.absoluteString
 
         buttonDisabled = true
         setLoadingTime(to: 0.0)
@@ -256,5 +252,6 @@ class StorageViewModel: NSObject, ObservableObject {
             print(error.localizedDescription)
         }
 
+        xcodeApplicationPath.stopAccessingSecurityScopedResource()
     }
 }

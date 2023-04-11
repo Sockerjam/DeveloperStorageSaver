@@ -34,7 +34,7 @@ struct StorageDetailInfoView: View {
             switch viewModel.loadingState {
             case .loading:
                 ProgressView()
-                    .foregroundColor(.white)
+                    .tint(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, 20)
             case .loaded:
