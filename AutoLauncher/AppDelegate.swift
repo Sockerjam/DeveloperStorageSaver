@@ -27,7 +27,8 @@ class AutoLauncherAppDelegate: NSObject, NSApplicationDelegate {
             }
             let applicationPathString = path as String
             guard let pathURL = URL(string: applicationPathString) else { return }
-            NSWorkspace.shared.openApplication(at: pathURL, configuration: NSWorkspace.OpenConfiguration())
+//            NSWorkspace.shared.openApplication(at: pathURL, configuration: NSWorkspace.OpenConfiguration())
+            NSWorkspace.shared.launchApplication(pathURL.absoluteString)
         }
         
     }
