@@ -13,7 +13,6 @@
 		8464D80D29E2E3BB0075FFA6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8464D80C29E2E3BB0075FFA6 /* AppDelegate.swift */; };
 		8464D81A29E2EA430075FFA6 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8464D81929E2EA430075FFA6 /* main.swift */; };
 		8464D81C29E2EAF30075FFA6 /* AutoLauncher.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8464D80A29E2E3BB0075FFA6 /* AutoLauncher.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		8464D81F29E2EB4F0075FFA6 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8464D81E29E2EB4F0075FFA6 /* ServiceManagement.framework */; };
 		922CE67A29C3666F00803DFF /* StorageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922CE67929C3666F00803DFF /* StorageViewModel.swift */; };
 		922CE67C29C3C38500803DFF /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922CE67B29C3C38500803DFF /* Model.swift */; };
 		922CE67E29C3C7F700803DFF /* ApplicationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922CE67D29C3C7F700803DFF /* ApplicationMenu.swift */; };
@@ -23,6 +22,7 @@
 		92887F3329DA1FB70020933B /* UserDefaultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92887F3229DA1FB70020933B /* UserDefaultManager.swift */; };
 		929420AF29E43A1D0087DD5B /* ToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929420AE29E43A1D0087DD5B /* ToolbarView.swift */; };
 		929420B129E44CB40087DD5B /* ToolBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929420B029E44CB40087DD5B /* ToolBarViewModel.swift */; };
+		92BA615F29E602750040A0A4 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8464D81E29E2EB4F0075FFA6 /* ServiceManagement.framework */; };
 		92E144F029C1D6C6008093B8 /* DeveloperStorageSaverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E144EF29C1D6C6008093B8 /* DeveloperStorageSaverApp.swift */; };
 		92E144F229C1D6C6008093B8 /* StorageMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E144F129C1D6C6008093B8 /* StorageMainView.swift */; };
 		92E144F429C1D6C7008093B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92E144F329C1D6C7008093B8 /* Assets.xcassets */; };
@@ -85,7 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8464D81F29E2EB4F0075FFA6 /* ServiceManagement.framework in Frameworks */,
+				92BA615F29E602750040A0A4 /* ServiceManagement.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,7 +326,7 @@
 				CODE_SIGN_ENTITLEMENTS = AutoLauncher/AutoLauncher.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = M79UR55F3F;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -357,7 +357,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = M79UR55F3F;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -500,7 +500,7 @@
 				CODE_SIGN_ENTITLEMENTS = DeveloperStorageSaver/DeveloperStorageSaver.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"DeveloperStorageSaver/Preview Content\"";
 				DEVELOPMENT_TEAM = M79UR55F3F;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -532,7 +532,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"DeveloperStorageSaver/Preview Content\"";
 				DEVELOPMENT_TEAM = M79UR55F3F;
 				ENABLE_HARDENED_RUNTIME = YES;
