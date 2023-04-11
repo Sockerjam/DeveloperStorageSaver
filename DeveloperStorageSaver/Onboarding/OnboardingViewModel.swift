@@ -41,7 +41,7 @@ class OnboardingViewModel: ObservableObject {
 
             guard let userSelectedDirectory = nsOpenPalen.urls.first else { return }
 
-            guard userSelectedDirectory.absoluteString.contains("Developer") || userSelectedDirectory.absoluteString.contains("Xcode") else { return }
+            guard userSelectedDirectory.absoluteString.contains("Library/Developer") || userSelectedDirectory.absoluteString.contains("Xcode.app") else { return }
 
             let appendedDirectory = userSelectedDirectory.appending(path: xcode ? "Contents/Developer/usr/bin" : "")
 
