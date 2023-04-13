@@ -20,7 +20,7 @@ class OnboardingViewModel: ObservableObject {
     func setupNSOpenPanel(xcode: Bool) {
 
         nsOpenPalen.prompt = "Select"
-        nsOpenPalen.message = xcode ? "Please select your Xcode Application" : "Please select your Develop Directory"
+        nsOpenPalen.message = xcode ? "Please select your Xcode Application" : "Please select your Developer Directory"
 
         nsOpenPalen.canChooseFiles = xcode
         nsOpenPalen.allowedContentTypes = [.directory]
@@ -41,11 +41,14 @@ class OnboardingViewModel: ObservableObject {
 
             guard let userSelectedDirectory = nsOpenPalen.urls.first else { return }
 
-            guard userSelectedDirectory.absoluteString.contains("Library/Developer") || userSelectedDirectory.absoluteString.contains("Xcode.app") else { return }
+//            guard userSelectedDirectory.absoluteString.contains("Library/Developer") || userSelectedDirectory.absoluteString.contains("Xcode.app") else { return }
+
+            if xcode {
+                let infoPlistPath = userSelectedDirectory.appending(path: "Contents/Info.plist")
+                if
+            }
 
             let appendedDirectory = userSelectedDirectory.appending(path: xcode ? "Contents/Developer/usr/bin" : "")
-
-            print(appendedDirectory)
 
             saveToBookmark(selectedDirectory: appendedDirectory, xcode: xcode)
 
@@ -69,5 +72,25 @@ class OnboardingViewModel: ObservableObject {
         } else {
             directorySelected = true
         }
+    }
+
+    private func directoryIsCorrect(selectedDirectory: URL, xcode: Bool) -> Bool {
+
+        if xcode {
+            let infoPlistPath = selectedDirectory.appending(path: "Contents/Info.plist").absoluteString
+            if FileManager.default.fileExists(atPath: infoPlistPath) {
+                return true
+            } else {
+                return false
+            }
+        } else {
+            let developerPath = selectedDirectory.appending(path: "Developer/").absoluteString
+            if FileManager.default.fileExists(atPath: developerPath) {
+                return true
+            } else {
+                return false
+            }
+        }
+
     }
 }
