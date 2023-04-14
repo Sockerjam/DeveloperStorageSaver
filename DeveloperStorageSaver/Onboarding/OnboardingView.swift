@@ -17,26 +17,52 @@ struct OnboardingView: View {
     var body: some View {
         VStack {
             Text("""
-                 To Use Developer Storage Saver
-                 please select your User/Library/Developer
+                 To Use Developer Storage Saver please
+                 select your User/Library/Developer
                  Directory and Application/Xcode.app
                  location.
                  """)
+            if onboardingViewModel.directorySelectedIsWrong {
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .resizable()
+                        .frame(width: 15, height: 15)
+                        .padding(.vertical, 2)
+                        .foregroundColor(.red)
+                    Text("You Selected The Wrong Directory. Try Again")
+                }
+                .padding(.horizontal, 5)
+                .background(.orange)
+            }
             Button {
                 onboardingViewModel.setupNSOpenPanel(xcode: false)
             } label: {
                 HStack {
+
                     Image(systemName: directorySelected ? "checkmark.circle.fill" : "folder.fill")
                         .resizable()
                         .frame(width: 15, height: 15)
                         .padding(.vertical, 2)
-                        .foregroundColor(directorySelected ? .green : .gray)
+                        .foregroundColor(directorySelected ? .green : .white)
                     Text("Select Your Developer Directory")
+                        .foregroundColor(.white)
+
                 }
             }
             .buttonStyle(.borderedProminent)
-
             .padding()
+            if onboardingViewModel.xcodeApplicationSelectedIsWrong {
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .resizable()
+                        .frame(width: 15, height: 15)
+                        .padding(.vertical, 2)
+                        .foregroundColor(.red)
+                    Text("You Selected The Wrong Application. Try Again")
+                }
+                .padding(.horizontal, 5)
+                .background(.orange)
+            }
             Button {
                 onboardingViewModel.setupNSOpenPanel(xcode: true)
             } label: {
@@ -45,8 +71,9 @@ struct OnboardingView: View {
                         .resizable()
                         .frame(width: 15, height: 15)
                         .padding(.vertical, 2)
-                        .foregroundColor(xcodeApplicationSelected ? .green : .gray)
+                        .foregroundColor(xcodeApplicationSelected ? .green : .white)
                     Text("Select Your Xcode Application")
+                        .foregroundColor(.white)
                 }
             }
             .buttonStyle(.borderedProminent)

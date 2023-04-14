@@ -20,12 +20,14 @@ struct InfoView: View {
                 Button {
                     delegate?.showInfoWindow()
                 } label: {
-                    Text("Read Before Use")
-                        .foregroundColor(.blue)
-                        .padding(.vertical, 10)
-                        .padding(.leading, 5)
+                    Image(systemName: "info.circle.fill")
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                        .foregroundColor(.black)
+                        .padding()
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(.link)
+                .background(.clear.opacity(0))
                 .controlSize(.large)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)

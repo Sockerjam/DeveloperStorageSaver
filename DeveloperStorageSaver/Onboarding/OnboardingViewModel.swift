@@ -12,10 +12,12 @@ class OnboardingViewModel: ObservableObject {
 
     @Published var directorySelected: Bool = false
     @Published var xcodeApplicationSelected: Bool = false
-    @Published var showAlert: Bool = false
+    @Published var directorySelectedIsWrong: Bool = false
+    @Published var xcodeApplicationSelectedIsWrong: Bool = false
 
     private let nsOpenPalen = NSOpenPanel()
     private let userDefaultManager = UserDefaultManager.shared
+    private let fileManager = FileManager.default
 
     func setupNSOpenPanel(xcode: Bool) {
 
@@ -72,21 +74,26 @@ class OnboardingViewModel: ObservableObject {
     private func directoryIsCorrect(selectedDirectory: URL, xcode: Bool) -> Bool {
 
         if xcode {
-            let infoPlistPath = selectedDirectory.appending(path: "Contents/Info.plist").absoluteString
-            print(infoPlistPath)
-            if FileManager.default.fileExists(atPath: infoPlistPath) {
-                return true
-            } else {
-                return false
-            }
-        } else {
-            let developerPath = selectedDirectory.appending(path: "CoreSimulator").absoluteString
-            print(developerPath)
-            if FileManager.default.fileExists(atPath: developerPath) {
-                print("TRUE")
+            let infoPlistPath = selectedDirectory.appendingPathComponent("Contents/Info.plist")
+            print(infoPlistPath.path())
+            if fileManager.fileExists(atPath: infoPlistPath.path()) {
+                guard let plistDictionary = NSDictionary(contentsOf: URL(filePath: infoPlistPath.path())) else { xcodeApplicationSelectedIsWrong = true; return false }
+                guard plistDictionary["CFBundleName"] as? String == "Xcode" else { xcodeApplicationSelectedIsWrong = true; return false }
+                xcodeApplicationSelectedIsWrong = false
                 return true
             } else {
                 print("FALSE")
+                xcodeApplicationSelectedIsWrong = true
+                return false
+            }
+        } else {
+            let developerPath = selectedDirectory.appendingPathComponent("CoreSimulator")
+            print(developerPath.path())
+            if fileManager.fileExists(atPath: developerPath.path()) {
+                directorySelectedIsWrong = false
+                return true
+            } else {
+                directorySelectedIsWrong = true
                 return false
             }
         }
