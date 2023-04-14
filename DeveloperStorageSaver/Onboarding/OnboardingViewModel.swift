@@ -75,21 +75,18 @@ class OnboardingViewModel: ObservableObject {
 
         if xcode {
             let infoPlistPath = selectedDirectory.appendingPathComponent("Contents/Info.plist")
-            print(infoPlistPath.path())
             if fileManager.fileExists(atPath: infoPlistPath.path()) {
                 guard let plistDictionary = NSDictionary(contentsOf: URL(filePath: infoPlistPath.path())) else { xcodeApplicationSelectedIsWrong = true; return false }
                 guard plistDictionary["CFBundleName"] as? String == "Xcode" else { xcodeApplicationSelectedIsWrong = true; return false }
                 xcodeApplicationSelectedIsWrong = false
                 return true
             } else {
-                print("FALSE")
                 xcodeApplicationSelectedIsWrong = true
                 return false
             }
         } else {
             let developerPath = selectedDirectory.appendingPathComponent("CoreSimulator")
-            print(developerPath.path())
-            if fileManager.fileExists(atPath: developerPath.path()) {
+            if fileManager.fileExists(atPath: selectedDirectory.appendingPathComponent("CoreSimulator").path()) && fileManager.fileExists(atPath: selectedDirectory.appendingPathComponent("Xcode").path()) {
                 directorySelectedIsWrong = false
                 return true
             } else {
