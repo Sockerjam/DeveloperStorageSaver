@@ -18,7 +18,7 @@ struct OnboardingView: View {
         VStack {
             Text("""
                  To Use Developer Storage Saver
-                 please select your Library/Developer
+                 please select your User/Library/Developer
                  Directory and Application/Xcode.app
                  location.
                  """)
@@ -26,9 +26,12 @@ struct OnboardingView: View {
                 onboardingViewModel.setupNSOpenPanel(xcode: false)
             } label: {
                 HStack {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(directorySelected ? .green : .white)
-                    Text("Select Developer Directory")
+                    Image(systemName: directorySelected ? "checkmark.circle.fill" : "folder.fill")
+                        .resizable()
+                        .frame(width: 15, height: 15)
+                        .padding(.vertical, 2)
+                        .foregroundColor(directorySelected ? .green : .gray)
+                    Text("Select Your Developer Directory")
                 }
             }
             .buttonStyle(.borderedProminent)
@@ -38,13 +41,15 @@ struct OnboardingView: View {
                 onboardingViewModel.setupNSOpenPanel(xcode: true)
             } label: {
                 HStack {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(xcodeApplicationSelected ? .green : .white)
-                    Text("Select Xcode Application")
+                    Image(systemName: xcodeApplicationSelected ? "checkmark.circle.fill" : "folder.fill")
+                        .resizable()
+                        .frame(width: 15, height: 15)
+                        .padding(.vertical, 2)
+                        .foregroundColor(xcodeApplicationSelected ? .green : .gray)
+                    Text("Select Your Xcode Application")
                 }
             }
             .buttonStyle(.borderedProminent)
-
 
         }
         .foregroundColor(.white)

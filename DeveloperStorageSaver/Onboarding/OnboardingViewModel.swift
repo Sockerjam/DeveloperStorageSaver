@@ -20,7 +20,7 @@ class OnboardingViewModel: ObservableObject {
     func setupNSOpenPanel(xcode: Bool) {
 
         nsOpenPalen.prompt = "Select"
-        nsOpenPalen.message = xcode ? "Please select your Xcode Application" : "Please select your Developer Directory"
+        nsOpenPalen.message = xcode ? "Please select your Applications/Xcode Application" : "Please select your Users/user_name/Library/Developer Directory"
 
         nsOpenPalen.canChooseFiles = xcode
         nsOpenPalen.allowedContentTypes = [.directory]
@@ -41,12 +41,7 @@ class OnboardingViewModel: ObservableObject {
 
             guard let userSelectedDirectory = nsOpenPalen.urls.first else { return }
 
-//            guard userSelectedDirectory.absoluteString.contains("Library/Developer") || userSelectedDirectory.absoluteString.contains("Xcode.app") else { return }
-
-            if xcode {
-                let infoPlistPath = userSelectedDirectory.appending(path: "Contents/Info.plist")
-                if
-            }
+            guard directoryIsCorrect(selectedDirectory: userSelectedDirectory, xcode: xcode) else { return }
 
             let appendedDirectory = userSelectedDirectory.appending(path: xcode ? "Contents/Developer/usr/bin" : "")
 
@@ -78,16 +73,20 @@ class OnboardingViewModel: ObservableObject {
 
         if xcode {
             let infoPlistPath = selectedDirectory.appending(path: "Contents/Info.plist").absoluteString
+            print(infoPlistPath)
             if FileManager.default.fileExists(atPath: infoPlistPath) {
                 return true
             } else {
                 return false
             }
         } else {
-            let developerPath = selectedDirectory.appending(path: "Developer/").absoluteString
+            let developerPath = selectedDirectory.appending(path: "CoreSimulator").absoluteString
+            print(developerPath)
             if FileManager.default.fileExists(atPath: developerPath) {
+                print("TRUE")
                 return true
             } else {
+                print("FALSE")
                 return false
             }
         }
