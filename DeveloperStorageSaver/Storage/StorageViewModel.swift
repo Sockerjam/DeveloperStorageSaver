@@ -253,4 +253,10 @@ class StorageViewModel: NSObject, ObservableObject {
 
         xcodeApplicationPath.stopAccessingSecurityScopedResource()
     }
+
+    func resetApplication() {
+        userDefaultManager.resetDefaults()
+        setupOnboardingSubscription()
+        userState = .onboarding
+    }
 }

@@ -85,7 +85,6 @@ class OnboardingViewModel: ObservableObject {
                 return false
             }
         } else {
-            let developerPath = selectedDirectory.appendingPathComponent("CoreSimulator")
             if fileManager.fileExists(atPath: selectedDirectory.appendingPathComponent("CoreSimulator").path()) && fileManager.fileExists(atPath: selectedDirectory.appendingPathComponent("Xcode").path()) {
                 directorySelectedIsWrong = false
                 return true

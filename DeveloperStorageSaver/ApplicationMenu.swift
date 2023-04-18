@@ -18,7 +18,7 @@ class ApplicationMenu: NSObject {
         
         let storageView = StorageMainView()
         let topView = NSHostingController(rootView: storageView)
-        topView.view.frame.size = CGSize(width: 300, height: 220)
+        topView.view.frame.size = CGSize(width: 300, height: 250)
     
         let customMenuItem = NSMenuItem()
         customMenuItem.view = topView.view

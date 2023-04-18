@@ -63,7 +63,7 @@ struct StorageDetailInfoView: View {
                         .foregroundColor(.white)
                 }
             }
-            .padding(.top, 5)
+            .padding(.top, 10)
             .disabled(buttonDisabled)
             .controlSize(.large)
             .buttonStyle(.borderedProminent)
@@ -74,6 +74,25 @@ struct StorageDetailInfoView: View {
                     .font(.footnote)
             }
             Spacer()
+            HStack {
+                Button {
+                    viewModel.resetApplication()
+                } label: {
+                    HStack(spacing: 5) {
+                        Image(systemName: "gobackward")
+                            .resizable()
+                            .frame(width: 15, height: 15)
+                            .foregroundColor(.accentColor)
+                        Text("Reset")
+                            .foregroundColor(.white)
+                    }
+                    .padding(.leading, 5)
+                    .padding(.bottom, 2)
+                }
+                .buttonStyle(.link)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
         }
         .frame(maxHeight: .infinity)
         .onReceive(viewModel.$buttonDisabled) { buttonEnabled in

@@ -62,7 +62,7 @@
 		92887F3229DA1FB70020933B /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
 		929420AE29E43A1D0087DD5B /* ToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarView.swift; sourceTree = "<group>"; };
 		929420B029E44CB40087DD5B /* ToolBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBarViewModel.swift; sourceTree = "<group>"; };
-		92E144EC29C1D6C6008093B8 /* DeveloperStorageSaver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeveloperStorageSaver.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		92E144EC29C1D6C6008093B8 /* DiskDevPro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DiskDevPro.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92E144EF29C1D6C6008093B8 /* DeveloperStorageSaverApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperStorageSaverApp.swift; sourceTree = "<group>"; };
 		92E144F129C1D6C6008093B8 /* StorageMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageMainView.swift; sourceTree = "<group>"; };
 		92E144F329C1D6C7008093B8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -155,7 +155,7 @@
 		92E144ED29C1D6C6008093B8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				92E144EC29C1D6C6008093B8 /* DeveloperStorageSaver.app */,
+				92E144EC29C1D6C6008093B8 /* DiskDevPro.app */,
 				8464D80A29E2E3BB0075FFA6 /* AutoLauncher.app */,
 			);
 			name = Products;
@@ -208,9 +208,9 @@
 			productReference = 8464D80A29E2E3BB0075FFA6 /* AutoLauncher.app */;
 			productType = "com.apple.product-type.application";
 		};
-		92E144EB29C1D6C6008093B8 /* DeveloperStorageSaver */ = {
+		92E144EB29C1D6C6008093B8 /* DiskDevPro */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 92E144FB29C1D6C7008093B8 /* Build configuration list for PBXNativeTarget "DeveloperStorageSaver" */;
+			buildConfigurationList = 92E144FB29C1D6C7008093B8 /* Build configuration list for PBXNativeTarget "DiskDevPro" */;
 			buildPhases = (
 				92E144E829C1D6C6008093B8 /* Sources */,
 				92E144E929C1D6C6008093B8 /* Frameworks */,
@@ -221,9 +221,9 @@
 			);
 			dependencies = (
 			);
-			name = DeveloperStorageSaver;
+			name = DiskDevPro;
 			productName = DeveloperStorageSaver;
-			productReference = 92E144EC29C1D6C6008093B8 /* DeveloperStorageSaver.app */;
+			productReference = 92E144EC29C1D6C6008093B8 /* DiskDevPro.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -257,7 +257,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				92E144EB29C1D6C6008093B8 /* DeveloperStorageSaver */,
+				92E144EB29C1D6C6008093B8 /* DiskDevPro */,
 				8464D80929E2E3BB0075FFA6 /* AutoLauncher */,
 			);
 		};
@@ -339,7 +339,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.niclasjeppsson.AutoLauncher;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -370,7 +370,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.niclasjeppsson.AutoLauncher;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -507,7 +507,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DeveloperStorageSaver/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = DeveloperStorageSaver;
+				INFOPLIST_KEY_CFBundleDisplayName = DiskDevPro;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -515,8 +515,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.niclasjeppsson.DeveloperStorageSaver;
+				MARKETING_VERSION = 1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.niclasjeppsson.DiskDevPro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -539,7 +539,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DeveloperStorageSaver/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = DeveloperStorageSaver;
+				INFOPLIST_KEY_CFBundleDisplayName = DiskDevPro;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -547,8 +547,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.niclasjeppsson.DeveloperStorageSaver;
+				MARKETING_VERSION = 1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.niclasjeppsson.DiskDevPro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -576,7 +576,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		92E144FB29C1D6C7008093B8 /* Build configuration list for PBXNativeTarget "DeveloperStorageSaver" */ = {
+		92E144FB29C1D6C7008093B8 /* Build configuration list for PBXNativeTarget "DiskDevPro" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				92E144FC29C1D6C7008093B8 /* Debug */,

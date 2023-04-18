@@ -10,7 +10,7 @@ import Cocoa
 class AutoLauncherAppDelegate: NSObject, NSApplicationDelegate {
     
     enum Constants {
-        static let mainAppBundleID = "com.niclasjeppsson.DeveloperStorageSaver"
+        static let mainAppBundleID = "com.niclasjeppsson.DiskDevPro"
     }
 
 
