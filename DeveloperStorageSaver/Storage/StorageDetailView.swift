@@ -17,7 +17,7 @@ struct StorageDetailView: View {
     @State private var loadingPercentage: Double = 0.0
     
     var body: some View {
-        ForEach(viewModel.storageSizes, id: \.self) { storageSize in
+        ForEach(StorageDirectory.allCases, id: \.self) { storage in
             if storageSize.directory == viewModel.directoryToDelete {
                 LoadingBarView(loadingPercentage: loadingPercentage)
                     .padding(.horizontal, 5)

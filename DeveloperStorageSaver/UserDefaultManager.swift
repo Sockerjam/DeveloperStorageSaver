@@ -30,8 +30,8 @@ class UserDefaultManager {
 
     static let shared = UserDefaultManager()
 
-    init() {}
-
+    private init() {}
+    
     func saveDirectoryBookmark(data: Data, xcode: Bool) {
 
         standard.set(data, forKey: xcode ? UserDefaultKey.xcode.rawValue : UserDefaultKey.directory.rawValue)

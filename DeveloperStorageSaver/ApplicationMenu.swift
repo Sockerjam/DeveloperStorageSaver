@@ -13,6 +13,19 @@ class ApplicationMenu: NSObject {
     private let menu = NSMenu()
 
     func createMenu() -> NSMenu {
+        
+        //MARK: Info View
+
+        let infoView = InfoView(delegate: self)
+        let infoViewHostingController = NSHostingController(rootView: infoView)
+        infoViewHostingController.view.frame.size = CGSize(width: 300, height: 25)
+
+        let infoViewMenuItem = NSMenuItem()
+        infoViewMenuItem.view = infoViewHostingController.view
+
+        infoViewMenuItem.target = self
+
+        menu.addItem(infoViewMenuItem)
 
         //MARK: Main Storage View
         
@@ -27,7 +40,7 @@ class ApplicationMenu: NSObject {
 
         //MARK: Toolbar View
 
-        var toolbarView = ToolbarView()
+        let toolbarView = ToolbarView()
         let toolbarHostingViewController = NSHostingController(rootView: toolbarView)
         toolbarHostingViewController.view.frame.size = CGSize(width: 300, height: 25)
 
@@ -35,19 +48,6 @@ class ApplicationMenu: NSObject {
         toolbarMenuItem.view = toolbarHostingViewController.view
 
         menu.addItem(toolbarMenuItem)
-
-        //MARK: Info View
-
-        let infoView = InfoView(delegate: self)
-        let infoViewHostingController = NSHostingController(rootView: infoView)
-        infoViewHostingController.view.frame.size = CGSize(width: 300, height: 25)
-
-        let infoViewMenuItem = NSMenuItem()
-        infoViewMenuItem.view = infoViewHostingController.view
-
-        infoViewMenuItem.target = self
-
-        menu.addItem(infoViewMenuItem)
 
         return menu
     }

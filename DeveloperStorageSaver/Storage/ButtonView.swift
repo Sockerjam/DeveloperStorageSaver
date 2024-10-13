@@ -25,28 +25,36 @@ struct ButtonView: View {
             }
         } label: {
             HStack {
-                Image(systemName: "hammer.circle.fill")
+                Image(systemName: getSymbolName())
                     .resizable()
-                    .frame(width: 25, height: 25)
+                    .frame(width: 20, height: 20)
                     .foregroundColor(.white)
-                    .overlay {
-                        Circle()
-                            .stroke(Color.green, lineWidth: 2)
-                    }
                     .padding(.horizontal, 2)
+                    .padding(.vertical, 2)
                 Text(storageSize.directory.rawValue + ": ")
                     .bold()
                 Spacer()
                 Text(storageSize.size)
             }
             .frame(maxWidth: .infinity)
-            .foregroundColor(selection == storageSize ? .red : .white)
+            .foregroundColor(.white)
             .contentShape(Rectangle())
         }
         .buttonStyle(.borderedProminent)
-        .tint(.purple)
+        .tint(selection == storageSize ? .blue : .gray)
         .cornerRadius(10)
         .padding(.horizontal, 5)
         .controlSize(.large)
+    }
+    
+    private func getSymbolName() -> String {
+        switch storageSize.directory {
+        case .coreSimulatorDevices:
+            "apps.iphone"
+        case .coreSimulatorCaches:
+            "server.rack"
+        case .xcodeDerivedData:
+            "folder"
+        }
     }
 }

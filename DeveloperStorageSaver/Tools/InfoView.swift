@@ -20,18 +20,18 @@ struct InfoView: View {
                 Button {
                     delegate?.showInfoWindow()
                 } label: {
-                    Image(systemName: "info.circle.fill")
+                    Image(systemName: "info.circle")
                         .resizable()
-                        .frame(width: 20, height: 20)
-                        .foregroundColor(.black)
-                        .padding()
+                        .frame(width: 16, height: 16)
+                        .foregroundColor(.white)
+                        .padding(.leading, 6)
                 }
                 .buttonStyle(.link)
                 .background(.clear.opacity(0))
                 .controlSize(.large)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-            .background(.pink)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .background(.gray)
     }
 }
 

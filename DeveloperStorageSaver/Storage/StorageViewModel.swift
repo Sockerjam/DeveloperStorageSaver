@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-enum StorageDirectory: String, Hashable {
+enum StorageDirectory: String, Hashable, CaseIterable {
     case coreSimulatorDevices = "Core Simulator Device"
     case coreSimulatorCaches = "Core Simulator Caches"
     case xcodeDerivedData = "Xcode Derived Data"
@@ -41,10 +41,13 @@ enum UserState {
     case storageView
 }
 
-@MainActor
 class StorageViewModel: NSObject, ObservableObject {
 
-    @Published var storageSizes: [StorageSize] = []
+    @Published var storageSizes: [StorageSize] = [
+        StorageSize(directory: .coreSimulatorCaches, size: "0 KB"),
+        StorageSize(directory: .coreSimulatorDevices, size: "0 KB"),
+        StorageSize(directory: .xcodeDerivedData, size: "0 KB")
+    ]
     @Published var directoryToDelete: StorageDirectory?
     @Published var loadingTime: Double = 0.0
     @Published var buttonDisabled: Bool?
@@ -125,7 +128,7 @@ class StorageViewModel: NSObject, ObservableObject {
             .store(in: &cancellable)
     }
 
-    private func fetchDeveloperPath() -> URL? {
+    private nonisolated func fetchDeveloperPath() -> URL? {
 
         guard let developerURL = try? userDefaultManager.fetchDeveloperBookmark() else { return nil }
         print("Fetched Developer Bookmark")
@@ -133,7 +136,7 @@ class StorageViewModel: NSObject, ObservableObject {
         return developerURL
     }
 
-    private func fetchXcodeApplicationPathURL() -> URL? {
+    private nonisolated func fetchXcodeApplicationPathURL() -> URL? {
 
         guard let xcodeApplicationURL = try? userDefaultManager.fetchXcodeBookmark() else { return nil }
         print("Fetched Xcode Bookmark")
@@ -141,25 +144,48 @@ class StorageViewModel: NSObject, ObservableObject {
         return xcodeApplicationURL
     }
 
-    func loadSizes() {
+    nonisolated func loadSizes() async {
         print("Loading Sizes")
-        Task {
-            async let coreSimulatorDevices = fetchSize(for: .coreSimulatorDevices)
-            async let coreSimulatorCaches = fetchSize(for: .coreSimulatorCaches)
-            async let xcodeDerivedData = fetchSize(for: .xcodeDerivedData)
-            storageSizes = await [coreSimulatorDevices, coreSimulatorCaches, xcodeDerivedData].compactMap {$0}
-            loadingState = .loaded
+        
+        await withTaskGroup(of: StorageSize.self) { group in
+            
+            var directorySizes: [StorageSize] = []
+            
+            for directory in StorageDirectory.allCases {
+                group.addTask {
+                    return await self.fetchSize(for: directory) ?? StorageSize(directory: directory, size: "0 MB")
+                }
+            }
+            
+            for await size in group {
+                directorySizes.append(size)
+            }
+            
+            await update(storageSize: directorySizes)
+            await setLoadingState(.loaded)
         }
     }
     
-    func reloadScreen() {
+    @MainActor
+    func update(storageSize: [StorageSize]) {
+        self.storageSizes = storageSize
+    }
+    
+    @MainActor
+    func setLoadingState(_ state: LoadingState) {
+        self.loadingState = state
+    }
+    
+    @MainActor
+    func reloadScreen() async {
         self.task = nil
-        self.loadSizes()
         self.buttonDisabled = false
         self.directoryToDelete = nil
         self.setLoadingTime(to: 0.0)
+        await self.loadSizes()
     }
 
+    @MainActor
     private func setLoadingTime(to value: Double) {
         loadingTime = value
     }
@@ -185,10 +211,10 @@ class StorageViewModel: NSObject, ObservableObject {
 
         libraryPath.stopAccessingSecurityScopedResource()
 
-        return StorageSize(directory: directory, size: sizeInMB ?? "0 MB")
+        return StorageSize(directory: directory, size: sizeInMB ?? "0 MB", loadingState: .loaded)
     }
 
-    func remove(directory: StorageDirectory?) {
+    nonisolated func remove(directory: StorageDirectory?) async {
 
         guard let directory = directory else { return }
         guard let developerPath = fetchDeveloperPath() else { return }
@@ -204,16 +230,16 @@ class StorageViewModel: NSObject, ObservableObject {
             let _ = try storagePath.checkResourceIsReachable()
             let storageURLS = try fileManager.contentsOfDirectory(at: storagePath, includingPropertiesForKeys: nil)
             try storageURLS.forEach { try fileManager.removeItem(at: $0) }
-            setLoadingTime(to: 1.0)
+            await setLoadingTime(to: 1.0)
         } catch {
-            reloadScreen()
+            await reloadScreen()
             print(error.localizedDescription)
         }
 
         developerPath.stopAccessingSecurityScopedResource()
     }
 
-    func removeSimulators(option: DeleteSimulator, directory: StorageDirectory?) {
+    nonisolated func removeSimulators(option: DeleteSimulator, directory: StorageDirectory?) async {
 
         task = Process()
         errorPipe = Pipe()
@@ -225,17 +251,18 @@ class StorageViewModel: NSObject, ObservableObject {
         guard let directory = directory else { return }
         guard let xcodeApplicationPath = fetchXcodeApplicationPathURL() else { return }
         let applicationPath = xcodeApplicationPath.absoluteString
-
-        buttonDisabled = true
-        setLoadingTime(to: 0.0)
-        directoryToDelete = directory
-
         let executableURL = applicationPath.appending("/simctl")
+        
+        
 
         task.standardOutput = outputPipe
         task.standardError = errorPipe
         task.executableURL = URL(filePath: executableURL, directoryHint: .isDirectory, relativeTo: nil)
         task.arguments = ["delete", option.rawValue]
+        
+        
+        await setUIForDelition(directory: directory)
+        
         task.terminationHandler = { [weak self] process in
             guard let self = self else { return }
             Task {
@@ -252,6 +279,13 @@ class StorageViewModel: NSObject, ObservableObject {
         }
 
         xcodeApplicationPath.stopAccessingSecurityScopedResource()
+    }
+    
+    @MainActor
+    func setUIForDelition(directory: StorageDirectory) {
+        buttonDisabled = true
+        setLoadingTime(to: 0.0)
+        directoryToDelete = directory
     }
 
     func resetApplication() {

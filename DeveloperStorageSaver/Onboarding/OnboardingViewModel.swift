@@ -8,8 +8,13 @@
 import Foundation
 import AppKit
 
+enum OnboardingStep {
+    case step1, step2
+}
+
 class OnboardingViewModel: ObservableObject {
 
+    @Published var onboardingStep: OnboardingStep = .step1
     @Published var directorySelected: Bool = false
     @Published var xcodeApplicationSelected: Bool = false
     @Published var directorySelectedIsWrong: Bool = false
@@ -19,10 +24,11 @@ class OnboardingViewModel: ObservableObject {
     private let userDefaultManager = UserDefaultManager.shared
     private let fileManager = FileManager.default
 
+    @MainActor
     func setupNSOpenPanel(xcode: Bool) {
 
         nsOpenPalen.prompt = "Select"
-        nsOpenPalen.message = xcode ? "Please select your Applications/Xcode Application" : "Please select your Users/user_name/Library/Developer Directory"
+        nsOpenPalen.message = xcode ? "Please select the Applications/Xcode.app" : "Please select your developer directory"
 
         nsOpenPalen.canChooseFiles = xcode
         nsOpenPalen.allowedContentTypes = [.directory]
@@ -35,8 +41,10 @@ class OnboardingViewModel: ObservableObject {
 
     }
 
+    @MainActor
     private func launchNSOpenPanel(xcode: Bool) {
-
+       
+        nsOpenPalen.orderFront(nil)
         let dialogueButtonPressed = nsOpenPalen.runModal()
 
         if dialogueButtonPressed == NSApplication.ModalResponse.OK {
@@ -54,7 +62,7 @@ class OnboardingViewModel: ObservableObject {
         }
     }
 
-    private func saveToBookmark(selectedDirectory: URL, xcode: Bool) {
+    private nonisolated func saveToBookmark(selectedDirectory: URL, xcode: Bool) {
 
         do {
             let bookmarkData = try selectedDirectory.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
@@ -71,7 +79,7 @@ class OnboardingViewModel: ObservableObject {
         }
     }
 
-    private func directoryIsCorrect(selectedDirectory: URL, xcode: Bool) -> Bool {
+    private nonisolated func directoryIsCorrect(selectedDirectory: URL, xcode: Bool) -> Bool {
 
         if xcode {
             let infoPlistPath = selectedDirectory.appendingPathComponent("Contents/Info.plist")
@@ -87,9 +95,11 @@ class OnboardingViewModel: ObservableObject {
         } else {
             if fileManager.fileExists(atPath: selectedDirectory.appendingPathComponent("CoreSimulator").path()) && fileManager.fileExists(atPath: selectedDirectory.appendingPathComponent("Xcode").path()) {
                 directorySelectedIsWrong = false
+                onboardingStep = .step2
                 return true
             } else {
                 directorySelectedIsWrong = true
+                onboardingStep = .step1
                 return false
             }
         }

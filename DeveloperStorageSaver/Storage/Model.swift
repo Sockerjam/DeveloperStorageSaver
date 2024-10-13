@@ -5,10 +5,11 @@
 //  Created by Niclas Jeppsson on 16/03/2023.
 //
 
-import Foundation
+import SwiftUI
 
 struct StorageSize: Hashable {
 
     let directory: StorageDirectory
-    let size: String
+    var size: String
+    var loadingState: LoadingState = .loading
 }

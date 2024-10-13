@@ -23,7 +23,6 @@ struct ToolbarView: View {
             Toggle("Launch at Login", isOn: $toolbarViewModel.launchAtLogin)
                 .foregroundColor(.white)
                 .controlSize(.large)
-                .padding(.leading, 5)
             Spacer()
             Button {
                 toolbarViewModel.terminateApplication()
@@ -33,13 +32,12 @@ struct ToolbarView: View {
                     .padding(.vertical, 10)
             }
             .buttonStyle(.borderedProminent)
-            .tint(.red)
+            .tint(.blue)
             .controlSize(.large)
-            .padding(.trailing, 5)
-            
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.pink)
+        .padding(.horizontal, 6)
+        .background(.gray)
     }
 }
 

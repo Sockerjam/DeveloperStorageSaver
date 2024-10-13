@@ -12,13 +12,8 @@ struct StorageMainView: View {
     @StateObject var viewModel = StorageViewModel()
 
     var body: some View {
-        switch viewModel.userState {
-        case .onboarding:
-            OnboardingView()
-        case .storageView:
-            StorageDetailInfoView()
-                .environmentObject(viewModel)
-        }
+        StorageDetailInfoView()
+            .environmentObject(viewModel)
     }
 }
 
@@ -31,20 +26,15 @@ struct StorageDetailInfoView: View {
 
     var body: some View {
         VStack {
-            switch viewModel.loadingState {
-            case .loading:
-                ProgressView()
-                    .tint(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.bottom, 20)
-            case .loaded:
-                StorageDetailView(selection: $selection, buttonDisabled: $buttonDisabled)
-            }
+            StorageDetailView(selection: $selection, buttonDisabled: $buttonDisabled)
 
             HStack {
                 if selection?.directory == .coreSimulatorDevices {
                     Button {
-                        viewModel.removeSimulators(option: .unavailable, directory: selection?.directory)
+                        Task {
+                            await viewModel.removeSimulators(option: .unavailable, directory: selection?.directory)
+                        }
+                        
                     } label: {
                         Label("Delete Unavailable", systemImage: "trash.circle")
                             .contentShape(Rectangle())
@@ -52,11 +42,14 @@ struct StorageDetailInfoView: View {
                     }
                 }
                 Button {
-                    if selection?.directory == .coreSimulatorDevices {
-                        viewModel.removeSimulators(option: .all, directory: selection?.directory)
-                    } else {
-                        viewModel.remove(directory: selection?.directory)
+                    Task {
+                        if selection?.directory == .coreSimulatorDevices {
+                            await viewModel.removeSimulators(option: .all, directory: selection?.directory)
+                        } else {
+                            await viewModel.remove(directory: selection?.directory)
+                        }
                     }
+                    
                 } label: {
                     Label(selection?.directory == .coreSimulatorDevices ? "Delete All" : "Delete", systemImage: "trash.circle")
                         .contentShape(Rectangle())
@@ -67,7 +60,7 @@ struct StorageDetailInfoView: View {
             .disabled(buttonDisabled)
             .controlSize(.large)
             .buttonStyle(.borderedProminent)
-            .tint(buttonDisabled ? .gray : .red)
+            .tint(buttonDisabled ? .gray : .blue)
             .shadow(radius: 2)
             if selection?.directory == .coreSimulatorDevices {
                 Text("Deleting All Requires Re-Installation Of Devices")
@@ -78,21 +71,20 @@ struct StorageDetailInfoView: View {
                 Button {
                     viewModel.resetApplication()
                 } label: {
-                    HStack(spacing: 5) {
+                    HStack(spacing: 6) {
                         Image(systemName: "gobackward")
                             .resizable()
-                            .frame(width: 15, height: 15)
-                            .foregroundColor(.accentColor)
+                            .frame(width: 16, height: 16)
+                            .foregroundColor(.white)
                         Text("Reset")
                             .foregroundColor(.white)
                     }
-                    .padding(.leading, 5)
-                    .padding(.bottom, 2)
                 }
                 .buttonStyle(.link)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-
+            .padding(.horizontal, 6)
+            .padding(.bottom, 6)
         }
         .frame(maxHeight: .infinity)
         .onReceive(viewModel.$buttonDisabled) { buttonEnabled in
@@ -101,9 +93,9 @@ struct StorageDetailInfoView: View {
         }
         .environmentObject(viewModel)
         .padding(.top, 10)
-        .background(Gradient(colors: [.purple, .pink]))
-        .onAppear {
-            viewModel.loadSizes()
+        .background(.gray)
+        .task {
+            await viewModel.loadSizes()
         }
     }
 }
