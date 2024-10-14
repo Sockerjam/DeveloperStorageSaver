@@ -12,7 +12,8 @@ struct ButtonView: View {
     @Binding var selection: StorageSize?
     @Binding var buttonDisabled: Bool
 
-    var storageSize: StorageSize
+    let storageSize: StorageSize
+    let loadingState: LoadingState
 
     var body: some View {
         Button {
@@ -27,14 +28,18 @@ struct ButtonView: View {
             HStack {
                 Image(systemName: getSymbolName())
                     .resizable()
-                    .frame(width: 20, height: 20)
+                    .frame(width: 16, height: 16)
                     .foregroundColor(.white)
-                    .padding(.horizontal, 2)
-                    .padding(.vertical, 2)
+                    .padding(2)
                 Text(storageSize.directory.rawValue + ": ")
                     .bold()
                 Spacer()
-                Text(storageSize.size)
+                if loadingState == .loading {
+                    ProgressView()
+                        .controlSize(.small)
+                } else {
+                    Text(storageSize.size)
+                }
             }
             .frame(maxWidth: .infinity)
             .foregroundColor(.white)

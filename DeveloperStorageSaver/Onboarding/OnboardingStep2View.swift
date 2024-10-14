@@ -38,7 +38,7 @@ struct OnboardingStep2View: View {
                 onboardingViewModel.setupNSOpenPanel(xcode: true)
             } label: {
                 HStack {
-                    Image(systemName: xcodeApplicationSelected ? "checkmark.circle.fill" : "folder.fill")
+                    Image(systemName: xcodeApplicationSelected ? "checkmark.circle.fill" : "hammer.fill")
                         .resizable()
                         .frame(width: 16, height: 16)
                         .foregroundColor(xcodeApplicationSelected ? .green : .white)

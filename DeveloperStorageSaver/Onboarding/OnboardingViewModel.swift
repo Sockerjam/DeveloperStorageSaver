@@ -19,6 +19,7 @@ class OnboardingViewModel: ObservableObject {
     @Published var xcodeApplicationSelected: Bool = false
     @Published var directorySelectedIsWrong: Bool = false
     @Published var xcodeApplicationSelectedIsWrong: Bool = false
+    @Published var userState: UserState = .onboarding
 
     private let nsOpenPalen = NSOpenPanel()
     private let userDefaultManager = UserDefaultManager.shared
@@ -74,8 +75,10 @@ class OnboardingViewModel: ObservableObject {
 
         if xcode {
             xcodeApplicationSelected = true
+            userState = .storageView
         } else {
             directorySelected = true
+            onboardingStep = .step2
         }
     }
 
@@ -95,14 +98,11 @@ class OnboardingViewModel: ObservableObject {
         } else {
             if fileManager.fileExists(atPath: selectedDirectory.appendingPathComponent("CoreSimulator").path()) && fileManager.fileExists(atPath: selectedDirectory.appendingPathComponent("Xcode").path()) {
                 directorySelectedIsWrong = false
-                onboardingStep = .step2
                 return true
             } else {
                 directorySelectedIsWrong = true
-                onboardingStep = .step1
                 return false
             }
         }
-
     }
 }

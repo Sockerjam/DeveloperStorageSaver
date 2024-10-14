@@ -14,16 +14,17 @@ struct StorageDetailView: View {
     @Binding var selection: StorageSize?
     @Binding var buttonDisabled: Bool
     
+    
     @State private var loadingPercentage: Double = 0.0
     
     var body: some View {
-        ForEach(StorageDirectory.allCases, id: \.self) { storage in
+        ForEach(viewModel.storageSizes, id: \.self) { storageSize in
             if storageSize.directory == viewModel.directoryToDelete {
                 LoadingBarView(loadingPercentage: loadingPercentage)
                     .padding(.horizontal, 5)
                     .frame(height: 35)
             } else {
-                ButtonView(selection: $selection, buttonDisabled: $buttonDisabled, storageSize: storageSize)
+                ButtonView(selection: $selection, buttonDisabled: $buttonDisabled, storageSize: storageSize, loadingState: viewModel.loadingState)
                     .frame(height: 35)
             }
             Rectangle()

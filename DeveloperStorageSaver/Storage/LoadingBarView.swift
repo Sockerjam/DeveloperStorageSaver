@@ -18,7 +18,7 @@ struct LoadingBarView: View {
             GeometryReader { proxy in
                 ZStack {
                     Rectangle()
-                        .foregroundColor(.red)
+                        .foregroundColor(.blue)
                         .cornerRadius(10)
                 }.loadingAnimation(width: proxy.size.width, loadingPercentage: loadingPercentage) {
                     Task {

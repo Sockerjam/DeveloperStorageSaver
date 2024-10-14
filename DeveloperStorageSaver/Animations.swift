@@ -58,8 +58,9 @@ struct TextAnimatable: ViewModifier, Animatable {
     
     var textBody: some View {
         Text("\(Int(loadingPercentage * 100))%")
-            .frame(maxWidth: .infinity, alignment: .leading).padding(.leading, 5)
-            .font(.subheadline).bold()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.leading, 5)
+            .font(.callout).bold()
             .foregroundColor(.white)
     }
 }

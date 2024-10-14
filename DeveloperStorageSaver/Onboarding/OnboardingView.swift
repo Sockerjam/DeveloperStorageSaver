@@ -13,6 +13,7 @@ struct OnboardingView: View {
     
     @State var directorySelected: Bool = false
     @State var xcodeApplicationSelected: Bool = false
+    @Binding var userState: UserState
     
     var body: some View {
         Group {
@@ -37,14 +38,10 @@ struct OnboardingView: View {
             withAnimation(.easeIn(duration: 0.6)) {
                 self.xcodeApplicationSelected = xcodeApplicationSelected
             }
-            
         }
-    }
-}
-
-struct OnboardingView_Previews: PreviewProvider {
-    static var previews: some View {
-        OnboardingView()
+        .onReceive(onboardingViewModel.$userState) { userState in
+            self.userState = userState
+        }
     }
 }
 

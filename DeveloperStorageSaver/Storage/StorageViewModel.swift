@@ -147,6 +147,8 @@ class StorageViewModel: NSObject, ObservableObject {
     nonisolated func loadSizes() async {
         print("Loading Sizes")
         
+        await setLoadingState(.loading)
+        
         await withTaskGroup(of: StorageSize.self) { group in
             
             var directorySizes: [StorageSize] = []
@@ -219,8 +221,7 @@ class StorageViewModel: NSObject, ObservableObject {
         guard let directory = directory else { return }
         guard let developerPath = fetchDeveloperPath() else { return }
 
-        buttonDisabled = true
-        directoryToDelete = directory
+        await setUIForDelition(directory: directory)
 
         let storagePath = developerPath.appending(path: directory.path)
 
@@ -253,8 +254,6 @@ class StorageViewModel: NSObject, ObservableObject {
         let applicationPath = xcodeApplicationPath.absoluteString
         let executableURL = applicationPath.appending("/simctl")
         
-        
-
         task.standardOutput = outputPipe
         task.standardError = errorPipe
         task.executableURL = URL(filePath: executableURL, directoryHint: .isDirectory, relativeTo: nil)
@@ -291,6 +290,8 @@ class StorageViewModel: NSObject, ObservableObject {
     func resetApplication() {
         userDefaultManager.resetDefaults()
         setupOnboardingSubscription()
-        userState = .onboarding
+        Task { @MainActor in
+            userState = .onboarding
+        }
     }
 }

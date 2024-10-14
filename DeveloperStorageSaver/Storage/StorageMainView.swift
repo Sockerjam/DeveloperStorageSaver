@@ -9,20 +9,26 @@ import SwiftUI
 
 struct StorageMainView: View {
 
-    @StateObject var viewModel = StorageViewModel()
-
+    @State private var userState: UserState = .onboarding
+    
     var body: some View {
-        StorageDetailInfoView()
-            .environmentObject(viewModel)
+        switch userState {
+        case .onboarding:
+            OnboardingView(userState: $userState)
+        case .storageView:
+            StorageDetailInfoView(userState: $userState)
+        }
     }
 }
 
 struct StorageDetailInfoView: View {
     
-    @EnvironmentObject var viewModel: StorageViewModel
+    @StateObject var viewModel = StorageViewModel()
 
     @State private var selection: StorageSize?
     @State private var buttonDisabled = true
+    
+    @Binding var userState: UserState
 
     var body: some View {
         VStack {
@@ -90,6 +96,9 @@ struct StorageDetailInfoView: View {
         .onReceive(viewModel.$buttonDisabled) { buttonEnabled in
             guard let buttonEnabled = buttonEnabled else { return }
             self.buttonDisabled = buttonEnabled
+        }
+        .onReceive(viewModel.$userState) { userState in
+            self.userState = userState
         }
         .environmentObject(viewModel)
         .padding(.top, 10)
