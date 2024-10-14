@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct StorageMainView: View {
-
-    @State private var userState: UserState = .onboarding
+    
+    @State private var userState: UserState = .storageView
     
     var body: some View {
         switch userState {

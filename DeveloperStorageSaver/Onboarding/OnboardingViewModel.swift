@@ -45,7 +45,6 @@ class OnboardingViewModel: ObservableObject {
     @MainActor
     private func launchNSOpenPanel(xcode: Bool) {
        
-        nsOpenPalen.orderFront(nil)
         let dialogueButtonPressed = nsOpenPalen.runModal()
 
         if dialogueButtonPressed == NSApplication.ModalResponse.OK {
