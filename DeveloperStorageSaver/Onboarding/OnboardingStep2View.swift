@@ -13,8 +13,6 @@ struct OnboardingStep2View: View {
     
     @Binding var xcodeApplicationSelected: Bool
     
-//    @State private var amount: Double = -10
-    
     var body: some View {
         VStack {
             if onboardingViewModel.xcodeApplicationSelectedIsWrong {
@@ -25,7 +23,6 @@ struct OnboardingStep2View: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.bottom, 6)
-                    .foregroundStyle(.green)
                     .shadow(radius: 8)
                 Text("Next Step:")
                     .font(.title2)

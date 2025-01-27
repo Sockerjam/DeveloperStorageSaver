@@ -26,6 +26,12 @@ struct OnboardingStep1View: View {
             Text("Path: Library/Developer")
                 .font(.body)
                 .padding(.bottom, 4)
+            Text("""
+                (Library can sometimes be hidden in Finder. 
+                Use Shift + Command + . to show hidden files)
+                """)
+                .font(.footnote)
+                .padding(.bottom, 4)
             Button {
                 onboardingViewModel.setupNSOpenPanel(xcode: false)
             } label: {
@@ -56,6 +62,8 @@ struct OnboardingStep1View: View {
             .font(.callout)
         }
         .foregroundColor(.red)
+        .padding(4)
         .background(.white)
+        .cornerRadius(8)
     }
 }

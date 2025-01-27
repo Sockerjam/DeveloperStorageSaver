@@ -28,7 +28,7 @@ struct ButtonView: View {
             HStack {
                 Image(systemName: getSymbolName())
                     .resizable()
-                    .frame(width: 16, height: 16)
+                    .frame(width: 12, height: 12)
                     .foregroundColor(.white)
                     .padding(2)
                 Text(storageSize.directory.rawValue + ": ")

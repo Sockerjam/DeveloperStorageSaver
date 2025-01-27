@@ -46,7 +46,7 @@ class ToolbarViewModel: ObservableObject {
                 case false:
                     print("Combine False")
                     self.appService.unregister { error in
-                        print("AppService Unregister Error: \(error)")
+                        print("AppService Unregister Error: \(error?.localizedDescription ?? "No Error")")
                     }
                     self.userDefaultManager.setLaunchAtLoginState(false)
                 }

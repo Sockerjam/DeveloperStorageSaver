@@ -14,7 +14,6 @@ struct StorageDetailView: View {
     @Binding var selection: StorageSize?
     @Binding var buttonDisabled: Bool
     
-    
     @State private var loadingPercentage: Double = 0.0
     
     var body: some View {
