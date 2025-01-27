@@ -40,7 +40,6 @@ struct StorageDetailInfoView: View {
                         Task {
                             await viewModel.removeSimulators(option: .unavailable, directory: selection?.directory)
                         }
-                        
                     } label: {
                         Label("Delete Unavailable", systemImage: "trash.circle")
                             .contentShape(Rectangle())
@@ -55,7 +54,6 @@ struct StorageDetailInfoView: View {
                             await viewModel.remove(directory: selection?.directory)
                         }
                     }
-                    
                 } label: {
                     Label(selection?.directory == .coreSimulatorDevices ? "Delete All" : "Delete", systemImage: "trash.circle")
                         .contentShape(Rectangle())

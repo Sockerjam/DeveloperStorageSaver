@@ -128,7 +128,7 @@ class StorageViewModel: NSObject, ObservableObject {
             .store(in: &cancellable)
     }
 
-    private nonisolated func fetchDeveloperPath() -> URL? {
+    private func fetchDeveloperPath() -> URL? {
 
         guard let developerURL = try? userDefaultManager.fetchDeveloperBookmark() else { return nil }
         print("Fetched Developer Bookmark")
@@ -136,7 +136,7 @@ class StorageViewModel: NSObject, ObservableObject {
         return developerURL
     }
 
-    private nonisolated func fetchXcodeApplicationPathURL() -> URL? {
+    private func fetchXcodeApplicationPathURL() -> URL? {
 
         guard let xcodeApplicationURL = try? userDefaultManager.fetchXcodeBookmark() else { return nil }
         print("Fetched Xcode Bookmark")
@@ -144,7 +144,7 @@ class StorageViewModel: NSObject, ObservableObject {
         return xcodeApplicationURL
     }
 
-    nonisolated func loadSizes() async {
+    func loadSizes() async {
         print("Loading Sizes")
         
         await setLoadingState(.loading)
@@ -216,7 +216,7 @@ class StorageViewModel: NSObject, ObservableObject {
         return StorageSize(directory: directory, size: sizeInMB ?? "0 MB", loadingState: .loaded)
     }
 
-    nonisolated func remove(directory: StorageDirectory?) async {
+    func remove(directory: StorageDirectory?) async {
 
         guard let directory = directory else { return }
         guard let developerPath = fetchDeveloperPath() else { return }
@@ -240,7 +240,7 @@ class StorageViewModel: NSObject, ObservableObject {
         developerPath.stopAccessingSecurityScopedResource()
     }
 
-    nonisolated func removeSimulators(option: DeleteSimulator, directory: StorageDirectory?) async {
+    func removeSimulators(option: DeleteSimulator, directory: StorageDirectory?) async {
 
         task = Process()
         errorPipe = Pipe()
