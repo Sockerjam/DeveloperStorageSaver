@@ -29,7 +29,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
 
         AppDelegate.instance = self
-        statusBarItem.button?.image = NSImage(named: NSImage.Name("hammer.circle.fill"))
+        statusBarItem.button?.image = NSImage(named: NSImage.Name("ToolbarLogo"))
         statusBarItem.button?.imagePosition = .imageLeading
         statusBarItem.menu = menu.createMenu()
     }

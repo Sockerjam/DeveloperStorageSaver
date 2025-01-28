@@ -1,11 +1,11 @@
 {
   "images" : [
     {
+      "filename" : "ToolbarLogo.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "hammer.circle.fill@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
