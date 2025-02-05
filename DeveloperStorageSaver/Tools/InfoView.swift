@@ -31,7 +31,6 @@ struct InfoView: View {
                 .controlSize(.large)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .background(.gray)
     }
 }
 

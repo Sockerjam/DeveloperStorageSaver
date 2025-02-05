@@ -27,7 +27,6 @@ struct OnboardingView: View {
         .environmentObject(onboardingViewModel)
         .foregroundColor(.white)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.gray)
         .onReceive(onboardingViewModel.$directorySelected) { directorySelected in
             withAnimation(.easeIn(duration: 0.6)) {
                 self.directorySelected = directorySelected

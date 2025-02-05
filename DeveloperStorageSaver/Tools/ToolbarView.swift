@@ -37,7 +37,6 @@ struct ToolbarView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.horizontal, 6)
-        .background(.gray)
     }
 }
 

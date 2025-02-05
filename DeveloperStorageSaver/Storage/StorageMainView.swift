@@ -100,7 +100,6 @@ struct StorageDetailInfoView: View {
         }
         .environmentObject(viewModel)
         .padding(.top, 10)
-        .background(.gray)
         .task {
             await viewModel.loadSizes()
         }
