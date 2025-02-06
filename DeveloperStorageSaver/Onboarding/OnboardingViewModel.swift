@@ -65,8 +65,9 @@ class OnboardingViewModel: ObservableObject {
     }
     
     func finishOnboarding() {
+        userDefaultManager.setUserOnboarded()
+        userDefaultManager.publishLaunchAtLoginState(state: launchAtStartup)
         userState = .storageView
-        userDefaultManager.setUserOnboarded(state: launchAtStartup)
     }
 
     private func saveToBookmark(selectedDirectory: URL, xcode: Bool) {

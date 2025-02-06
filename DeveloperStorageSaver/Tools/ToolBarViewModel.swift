@@ -20,6 +20,7 @@ class ToolbarViewModel: ObservableObject {
     private var cancellable = Set<AnyCancellable>()
 
     init() {
+        fetchUserIsOnboarded()
         fetchLaunchAtStartupState()
         setupSubscription()
     }
@@ -40,15 +41,27 @@ class ToolbarViewModel: ObservableObject {
             .sink { state in
                 switch state {
                 case true:
-                    self.isOnboarded = true
                     self.launchAtStartup = true
                 case false:
-                    self.isOnboarded = false
                     self.launchAtStartup = false
                 }
             }
             .store(in: &cancellable)
         
+        userDefaultManager.userIsOnboardedPublisher
+            .sink { state in
+                switch state {
+                case true:
+                    self.isOnboarded = true
+                case false:
+                    self.isOnboarded = false
+                }
+            }
+            .store(in: &cancellable)
+    }
+    
+    private func fetchUserIsOnboarded() {
+        isOnboarded = userDefaultManager.isUserOboarded()
     }
 
     private func fetchLaunchAtStartupState() {

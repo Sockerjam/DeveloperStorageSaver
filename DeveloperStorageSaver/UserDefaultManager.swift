@@ -26,6 +26,7 @@ class UserDefaultManager {
     let directoryBookmarkPublisher = PassthroughSubject<Bool, Never>()
     let xcodeDirectoryBookmarkPublisher = PassthroughSubject<Bool, Never>()
     let launchAtLoginPublisher = PassthroughSubject<Bool, Never>()
+    let userIsOnboardedPublisher = PassthroughSubject<Bool, Never>()
 
     private let standard = UserDefaults.standard
 
@@ -46,9 +47,13 @@ class UserDefaultManager {
         }
     }
 
-    func setUserOnboarded(state: Bool) {
-        standard.set(state, forKey: UserDefaultKey.onboarded.rawValue)
-        print("onboarding set to: \(state)")
+    func setUserOnboarded() {
+        standard.set(true, forKey: UserDefaultKey.onboarded.rawValue)
+        userIsOnboardedPublisher.send(true)
+        print("onboarding set to: \(true)")
+    }
+    
+    func publishLaunchAtLoginState(state: Bool) {
         launchAtLoginPublisher.send(state)
     }
 
@@ -112,5 +117,7 @@ extension UserDefaultManager {
         if let bundleID = Bundle.main.bundleIdentifier {
             standard.removePersistentDomain(forName: bundleID)
         }
+        userIsOnboardedPublisher.send(false)
+        launchAtLoginPublisher.send(false)
     }
 }
