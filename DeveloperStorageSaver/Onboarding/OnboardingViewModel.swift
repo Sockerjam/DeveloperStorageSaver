@@ -7,23 +7,42 @@
 
 import Foundation
 import AppKit
+import Combine
 
 enum OnboardingStep {
-    case step1, step2
+    case step1, step2, step3
 }
 
 class OnboardingViewModel: ObservableObject {
 
     @Published var onboardingStep: OnboardingStep = .step1
-    @Published var directorySelected: Bool = false
     @Published var xcodeApplicationSelected: Bool = false
     @Published var directorySelectedIsWrong: Bool = false
     @Published var xcodeApplicationSelectedIsWrong: Bool = false
+    @Published var launchAtStartup: Bool = false
     @Published var userState: UserState = .onboarding
 
     private let nsOpenPalen = NSOpenPanel()
     private let userDefaultManager = UserDefaultManager.shared
+    private let launchAtStartupManager = LaunchAtStartupManager.shared
     private let fileManager = FileManager.default
+    private var cancellable: AnyCancellable?
+    
+    init() {
+        setupLaunchAtStartupSubscription()
+    }
+    
+    private func setupLaunchAtStartupSubscription() {
+        cancellable = $launchAtStartup
+            .sink { state in
+                switch state {
+                case true:
+                    self.launchAtStartupManager.setStartAppAtLaunch(state: true)
+                case false:
+                    self.launchAtStartupManager.setStartAppAtLaunch(state: false)
+                }
+            }
+    }
 
     @MainActor
     func setupNSOpenPanel(xcode: Bool) {
@@ -39,7 +58,6 @@ class OnboardingViewModel: ObservableObject {
         nsOpenPalen.canChooseDirectories = true
 
         launchNSOpenPanel(xcode: xcode)
-
     }
 
     @MainActor
@@ -61,8 +79,13 @@ class OnboardingViewModel: ObservableObject {
             nsOpenPalen.close()
         }
     }
+    
+    func finishOnboarding() {
+        userState = .storageView
+        userDefaultManager.setUserOnboarded()
+    }
 
-    private nonisolated func saveToBookmark(selectedDirectory: URL, xcode: Bool) {
+    private func saveToBookmark(selectedDirectory: URL, xcode: Bool) {
 
         do {
             let bookmarkData = try selectedDirectory.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
@@ -74,14 +97,13 @@ class OnboardingViewModel: ObservableObject {
 
         if xcode {
             xcodeApplicationSelected = true
-            userState = .storageView
+            onboardingStep = .step3
         } else {
-            directorySelected = true
             onboardingStep = .step2
         }
     }
 
-    private nonisolated func directoryIsCorrect(selectedDirectory: URL, xcode: Bool) -> Bool {
+    private func directoryIsCorrect(selectedDirectory: URL, xcode: Bool) -> Bool {
 
         if xcode {
             let infoPlistPath = selectedDirectory.appendingPathComponent("Contents/Info.plist")

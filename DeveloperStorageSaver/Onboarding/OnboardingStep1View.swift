@@ -11,8 +11,6 @@ struct OnboardingStep1View: View {
     
     @EnvironmentObject var onboardingViewModel: OnboardingViewModel
     
-    @Binding var directorySelected: Bool
-    
     var body: some View {
         VStack(alignment: .leading) {
             if onboardingViewModel.directorySelectedIsWrong {
@@ -39,12 +37,12 @@ struct OnboardingStep1View: View {
                     Image(systemName: "folder.fill")
                         .resizable()
                         .frame(width: 16, height: 16)
+                        .foregroundColor(.white)
                     Text("Browse for Developer Directory")
                 }
             }
             .buttonStyle(.borderedProminent)
             .padding(.vertical, 12)
-            .foregroundColor(.white)
         }
     }
     

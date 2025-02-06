@@ -25,6 +25,7 @@ class UserDefaultManager {
     let xcodePublisher = PassthroughSubject<Bool, Never>()
     let directoryBookmarkPublisher = PassthroughSubject<Bool, Never>()
     let xcodeDirectoryBookmarkPublisher = PassthroughSubject<Bool, Never>()
+    let launchAtLoginPublisher = PassthroughSubject<Bool, Never>()
 
     private let standard = UserDefaults.standard
 
@@ -43,12 +44,9 @@ class UserDefaultManager {
             directoryPublisher.send(true)
             directoryPublisher.send(completion: .finished)
         }
-
-        setUserOnboarded()
     }
 
     func setUserOnboarded() {
-        guard standard.data(forKey: UserDefaultKey.xcode.rawValue) != nil  && standard.data(forKey: UserDefaultKey.directory.rawValue) != nil else { return }
         standard.set(true, forKey: UserDefaultKey.onboarded.rawValue)
         print("onboarding set")
     }
@@ -102,8 +100,8 @@ class UserDefaultManager {
         standard.set(state, forKey: UserDefaultKey.launchAtLogin.rawValue)
     }
 
-    func fetchLaunchAtLoginState() -> Bool? {
-        guard let value = standard.value(forKey: UserDefaultKey.launchAtLogin.rawValue) as? Bool else { return nil }
+    func fetchLaunchAtLoginState() -> Bool {
+        guard let value = standard.value(forKey: UserDefaultKey.launchAtLogin.rawValue) as? Bool else { return false }
         return value
     }
 }

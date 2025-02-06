@@ -16,6 +16,8 @@
 		8464D80D29E2E3BB0075FFA6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8464D80C29E2E3BB0075FFA6 /* AppDelegate.swift */; };
 		8464D81A29E2EA430075FFA6 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8464D81929E2EA430075FFA6 /* main.swift */; };
 		8464D81C29E2EAF30075FFA6 /* AutoLauncher.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8464D80A29E2E3BB0075FFA6 /* AutoLauncher.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		9200AAAD2D54DB190041FE1D /* OnboardingStep3View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9200AAAC2D54DB190041FE1D /* OnboardingStep3View.swift */; };
+		9200AAAF2D54E9AB0041FE1D /* LaunchAtStartupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9200AAAE2D54E9AB0041FE1D /* LaunchAtStartupManager.swift */; };
 		922CE67A29C3666F00803DFF /* StorageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922CE67929C3666F00803DFF /* StorageViewModel.swift */; };
 		922CE67C29C3C38500803DFF /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922CE67B29C3C38500803DFF /* Model.swift */; };
 		922CE67E29C3C7F700803DFF /* ApplicationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922CE67D29C3C7F700803DFF /* ApplicationMenu.swift */; };
@@ -59,6 +61,8 @@
 		8464D81529E2E3BD0075FFA6 /* AutoLauncher.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AutoLauncher.entitlements; sourceTree = "<group>"; };
 		8464D81929E2EA430075FFA6 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		8464D81E29E2EB4F0075FFA6 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
+		9200AAAC2D54DB190041FE1D /* OnboardingStep3View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStep3View.swift; sourceTree = "<group>"; };
+		9200AAAE2D54E9AB0041FE1D /* LaunchAtStartupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtStartupManager.swift; sourceTree = "<group>"; };
 		922CE67929C3666F00803DFF /* StorageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageViewModel.swift; sourceTree = "<group>"; };
 		922CE67B29C3C38500803DFF /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		922CE67D29C3C7F700803DFF /* ApplicationMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationMenu.swift; sourceTree = "<group>"; };
@@ -132,10 +136,11 @@
 		92887F3029DA1BD20020933B /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				92887F2E29DA13A50020933B /* OnboardingViewModel.swift */,
-				92887F2C29DA127A0020933B /* OnboardingView.swift */,
 				5728CEFA2CBC5B5000002D02 /* OnboardingStep1View.swift */,
 				5728CEF82CBC5A6000002D02 /* OnboardingStep2View.swift */,
+				9200AAAC2D54DB190041FE1D /* OnboardingStep3View.swift */,
+				92887F2C29DA127A0020933B /* OnboardingView.swift */,
+				92887F2E29DA13A50020933B /* OnboardingViewModel.swift */,
 				5728CEFD2CBC637C00002D02 /* WaveText.swift */,
 			);
 			path = Onboarding;
@@ -147,6 +152,7 @@
 				92F2F1F929D4328F00FE5AAF /* InfoView.swift */,
 				929420AE29E43A1D0087DD5B /* ToolbarView.swift */,
 				929420B029E44CB40087DD5B /* ToolBarViewModel.swift */,
+				9200AAAE2D54E9AB0041FE1D /* LaunchAtStartupManager.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -307,6 +313,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5728CEF92CBC5A6000002D02 /* OnboardingStep2View.swift in Sources */,
+				9200AAAF2D54E9AB0041FE1D /* LaunchAtStartupManager.swift in Sources */,
+				9200AAAD2D54DB190041FE1D /* OnboardingStep3View.swift in Sources */,
 				92E144F229C1D6C6008093B8 /* StorageMainView.swift in Sources */,
 				922CE67E29C3C7F700803DFF /* ApplicationMenu.swift in Sources */,
 				92667B5829D2ED980074060C /* Animations.swift in Sources */,

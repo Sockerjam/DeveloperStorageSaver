@@ -16,11 +16,9 @@ struct ToolbarView: View {
 
     @StateObject var toolbarViewModel = ToolbarViewModel()
 
-    @State private var launchAtLogin = true
-
     var body: some View {
         HStack {
-            Toggle("Launch at Login", isOn: $toolbarViewModel.launchAtLogin)
+            Toggle("Launch at Login", isOn: $toolbarViewModel.launchAtStartup)
                 .foregroundColor(.white)
                 .controlSize(.large)
             Spacer()

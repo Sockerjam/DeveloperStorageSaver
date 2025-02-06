@@ -7,56 +7,37 @@
 
 import Foundation
 import SwiftUI
-import ServiceManagement
 import Combine
 
 class ToolbarViewModel: ObservableObject {
 
-    private enum Constant {
-        static let bundleID = "com.niclasjeppsson.AutoLauncher"
-    }
+    @Published var launchAtStartup: Bool = false
 
-    @Published var launchAtLogin: Bool = true
-
-    private let appService = SMAppService()
     private let userDefaultManager = UserDefaultManager.shared
+    private let launchAtStartupManager = LaunchAtStartupManager.shared
 
     private var cancellable: AnyCancellable?
 
     init() {
-        fetchLaunchAtLoginState()
+        fetchLaunchAtStartupState()
         setupSubscription()
     }
 
     private func setupSubscription() {
-
-        cancellable = $launchAtLogin
+        
+        cancellable = $launchAtStartup
             .sink { state in
                 switch state {
                 case true:
-                    print("Combine True")
-                    do {
-                        SMAppService.loginItem(identifier: Constant.bundleID)
-                        try self.appService.register()
-                        self.userDefaultManager.setLaunchAtLoginState(true)
-                    } catch {
-                        print("AppService Register Error: \(error.localizedDescription)")
-                    }
-
+                    self.launchAtStartupManager.setStartAppAtLaunch(state: true)
                 case false:
-                    print("Combine False")
-                    self.appService.unregister { error in
-                        print("AppService Unregister Error: \(error?.localizedDescription ?? "No Error")")
-                    }
-                    self.userDefaultManager.setLaunchAtLoginState(false)
+                    self.launchAtStartupManager.setStartAppAtLaunch(state: false)
                 }
-
             }
     }
 
-    private func fetchLaunchAtLoginState() {
-        guard let launchAtLogin = userDefaultManager.fetchLaunchAtLoginState() else { self.launchAtLogin = true; return }
-        self.launchAtLogin = launchAtLogin
+    private func fetchLaunchAtStartupState() {
+        launchAtStartup = userDefaultManager.fetchLaunchAtLoginState()
     }
 
     func terminateApplication() {

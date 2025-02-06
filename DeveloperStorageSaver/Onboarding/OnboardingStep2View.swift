@@ -11,7 +11,7 @@ struct OnboardingStep2View: View {
     
     @EnvironmentObject var onboardingViewModel: OnboardingViewModel
     
-    @Binding var xcodeApplicationSelected: Bool
+    let xcodeApplicationSelected: Bool
     
     var body: some View {
         VStack {
@@ -19,32 +19,36 @@ struct OnboardingStep2View: View {
                 warningLabel
                     .padding(.bottom, 6)
             }
-            Text("Perfect!")
+            HStack(alignment: .center) {
+                Text("Perfect 🚀")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                    .padding(.bottom, 6)
-                    .shadow(radius: 8)
+                    .padding(.bottom, 8)
+                    .shadow(radius: 3)
+            }
+            VStack(alignment: .leading) {
                 Text("Next Step:")
                     .font(.title2)
                     .padding(.bottom, 2)
-                Text("Please select your Xcode.app to continue.")
+                Text("Please select your Xcode.app")
                     .font(.body)
                     .multilineTextAlignment(.leading)
-                    .padding(.bottom, 8)
-            Button {
-                onboardingViewModel.setupNSOpenPanel(xcode: true)
-            } label: {
-                HStack {
-                    Image(systemName: xcodeApplicationSelected ? "checkmark.circle.fill" : "hammer.fill")
-                        .resizable()
-                        .frame(width: 16, height: 16)
-                        .foregroundColor(xcodeApplicationSelected ? .green : .white)
-                    Text("Select Your Xcode Application")
-                        .foregroundColor(.white)
+                    .padding(.bottom, 4)
+                Button {
+                    onboardingViewModel.setupNSOpenPanel(xcode: true)
+                } label: {
+                    HStack {
+                        Image(systemName: xcodeApplicationSelected ? "checkmark.circle.fill" : "hammer.fill")
+                            .resizable()
+                            .frame(width: 16, height: 16)
+                            .foregroundColor(xcodeApplicationSelected ? .green : .white)
+                        Text("Select Your Xcode Application")
+                            .foregroundColor(.white)
+                    }
                 }
+                .buttonStyle(.borderedProminent)
+                .padding(.vertical, 12)
             }
-            .buttonStyle(.borderedProminent)
-            .padding(.vertical, 12)
         }
     }
     

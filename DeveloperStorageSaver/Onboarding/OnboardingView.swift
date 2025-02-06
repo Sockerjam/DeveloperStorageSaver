@@ -19,20 +19,16 @@ struct OnboardingView: View {
         Group {
             switch onboardingViewModel.onboardingStep {
             case .step1:
-                OnboardingStep1View(directorySelected: $directorySelected)
+                OnboardingStep1View()
             case .step2:
-                OnboardingStep2View(xcodeApplicationSelected: $xcodeApplicationSelected)
+                OnboardingStep2View(xcodeApplicationSelected: xcodeApplicationSelected)
+            case .step3:
+                OnboardingStep3View()
             }
         }
         .environmentObject(onboardingViewModel)
         .foregroundColor(.white)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .onReceive(onboardingViewModel.$directorySelected) { directorySelected in
-            withAnimation(.easeIn(duration: 0.6)) {
-                self.directorySelected = directorySelected
-            }
-            
-        }
         .onReceive(onboardingViewModel.$xcodeApplicationSelected) { xcodeApplicationSelected in
             withAnimation(.easeIn(duration: 0.6)) {
                 self.xcodeApplicationSelected = xcodeApplicationSelected
