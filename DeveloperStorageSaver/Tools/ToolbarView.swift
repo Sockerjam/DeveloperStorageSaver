@@ -13,14 +13,16 @@ protocol ToolbarDelegate: AnyObject {
 }
 
 struct ToolbarView: View {
-
+    
     @StateObject var toolbarViewModel = ToolbarViewModel()
-
+    
     var body: some View {
         HStack {
-            Toggle("Launch at Login", isOn: $toolbarViewModel.launchAtStartup)
-                .foregroundColor(.white)
-                .controlSize(.large)
+            if toolbarViewModel.isOnboarded {
+                Toggle("Launch at Login", isOn: $toolbarViewModel.launchAtStartup)
+                    .foregroundColor(.white)
+                    .controlSize(.large)
+            }
             Spacer()
             Button {
                 toolbarViewModel.terminateApplication()

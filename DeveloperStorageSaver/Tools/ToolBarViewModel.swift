@@ -12,11 +12,12 @@ import Combine
 class ToolbarViewModel: ObservableObject {
 
     @Published var launchAtStartup: Bool = false
+    @Published var isOnboarded: Bool = false
 
     private let userDefaultManager = UserDefaultManager.shared
     private let launchAtStartupManager = LaunchAtStartupManager.shared
 
-    private var cancellable: AnyCancellable?
+    private var cancellable = Set<AnyCancellable>()
 
     init() {
         fetchLaunchAtStartupState()
@@ -25,7 +26,7 @@ class ToolbarViewModel: ObservableObject {
 
     private func setupSubscription() {
         
-        cancellable = $launchAtStartup
+        $launchAtStartup
             .sink { state in
                 switch state {
                 case true:
@@ -33,7 +34,21 @@ class ToolbarViewModel: ObservableObject {
                 case false:
                     self.launchAtStartupManager.setStartAppAtLaunch(state: false)
                 }
+            }.store(in: &cancellable)
+        
+        userDefaultManager.launchAtLoginPublisher
+            .sink { state in
+                switch state {
+                case true:
+                    self.isOnboarded = true
+                    self.launchAtStartup = true
+                case false:
+                    self.isOnboarded = false
+                    self.launchAtStartup = false
+                }
             }
+            .store(in: &cancellable)
+        
     }
 
     private func fetchLaunchAtStartupState() {

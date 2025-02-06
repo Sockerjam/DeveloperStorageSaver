@@ -28,22 +28,6 @@ class OnboardingViewModel: ObservableObject {
     private let fileManager = FileManager.default
     private var cancellable: AnyCancellable?
     
-    init() {
-        setupLaunchAtStartupSubscription()
-    }
-    
-    private func setupLaunchAtStartupSubscription() {
-        cancellable = $launchAtStartup
-            .sink { state in
-                switch state {
-                case true:
-                    self.launchAtStartupManager.setStartAppAtLaunch(state: true)
-                case false:
-                    self.launchAtStartupManager.setStartAppAtLaunch(state: false)
-                }
-            }
-    }
-
     @MainActor
     func setupNSOpenPanel(xcode: Bool) {
 
@@ -82,7 +66,7 @@ class OnboardingViewModel: ObservableObject {
     
     func finishOnboarding() {
         userState = .storageView
-        userDefaultManager.setUserOnboarded()
+        userDefaultManager.setUserOnboarded(state: launchAtStartup)
     }
 
     private func saveToBookmark(selectedDirectory: URL, xcode: Bool) {

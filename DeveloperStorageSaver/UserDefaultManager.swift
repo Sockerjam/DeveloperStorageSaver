@@ -46,9 +46,10 @@ class UserDefaultManager {
         }
     }
 
-    func setUserOnboarded() {
-        standard.set(true, forKey: UserDefaultKey.onboarded.rawValue)
-        print("onboarding set")
+    func setUserOnboarded(state: Bool) {
+        standard.set(state, forKey: UserDefaultKey.onboarded.rawValue)
+        print("onboarding set to: \(state)")
+        launchAtLoginPublisher.send(state)
     }
 
     func isUserOboarded() -> Bool {
